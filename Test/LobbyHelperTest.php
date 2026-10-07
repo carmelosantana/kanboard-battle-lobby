@@ -91,4 +91,15 @@ class LobbyHelperTest extends Base
     {
         $this->assertStringContainsString('data-bl-context="page"', $this->h()->payloadAttributes(null, '"><script>'));
     }
+
+    public function testProjectIsCachedAndOptionsPassThrough(): void
+    {
+        $pid = $this->container['projectModel']->create(['name' => 'cache']);
+        $h = $this->h();
+        $this->assertSame('cache', $h->project($pid)['name']);
+        $this->container['projectModel']->update(['id' => $pid, 'name' => 'renamed']);
+        $this->assertSame('cache', $h->project($pid)['name']);
+        $this->assertSame([], $h->project(0));
+        $this->assertSame('mixed', $h->options(null)['characters']);
+    }
 }

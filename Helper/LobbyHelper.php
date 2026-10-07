@@ -80,6 +80,21 @@ class LobbyHelper extends Base
         return implode(' ', $out);
     }
 
+    /** @var array<int,array> */
+    private array $projects = [];
+
+    /** Project row, cached per request (the board hook passes only $task). */
+    public function project(int $projectId): array
+    {
+        return $this->projects[$projectId] ??= ($projectId ? ($this->projectModel->getById($projectId) ?: []) : []);
+    }
+
+    /** Resolved options for templates. */
+    public function options(?int $userId): array
+    {
+        return $this->container['battleLobbyOptions']->resolve($userId);
+    }
+
     public function isConflictActive(): bool
     {
         return class_exists('Kanboard\Plugin\ShadcnTheme\Plugin', false);

@@ -76,7 +76,10 @@ class OptionsModel extends Base
 
     public function saveAdmin(array $input): bool
     {
-        return (bool) $this->configModel->save([self::CONFIG_KEY => json_encode($this->validate($input))]);
+        $saved = (bool) $this->configModel->save([self::CONFIG_KEY => json_encode($this->validate($input))]);
+        // ConfigModel::get() reads through memoryCache->proxy(); evict it so same-request reads see the save.
+        $this->memoryCache->remove('proxy:' . get_class($this->configModel) . ':getAll');
+        return $saved;
     }
 
     public function userValues(int $userId): array

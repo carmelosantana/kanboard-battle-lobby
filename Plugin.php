@@ -32,6 +32,10 @@ class Plugin extends Base
         $this->route->addRoute('battlelobby/user/:user_id/reset', 'OptionsController', 'userReset', 'BattleLobby');
         $this->template->hook->attach('template:config:sidebar', 'BattleLobby:config/sidebar');
         $this->template->hook->attach('template:user:sidebar:actions', 'BattleLobby:user/sidebar');
+        $this->template->hook->attach('template:board:private:task:before-title', 'BattleLobby:board/tier');
+        $this->template->hook->attach('template:board:public:task:before-title', 'BattleLobby:board/tier');
+        $this->template->hook->attach('template:board:task:footer', 'BattleLobby:board/storm');
+        $this->template->hook->attach('template:layout:bottom', 'BattleLobby:layout/stage');
     }
 
     public function isPhpCompatible(?int $versionId = null): bool
