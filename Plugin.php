@@ -18,6 +18,8 @@ class Plugin extends Base
         $this->container['battleLobbyOptions'] = function ($c) {
             return new \Kanboard\Plugin\BattleLobby\Model\OptionsModel($c);
         };
+
+        $this->helper->register('battleLobby', \Kanboard\Plugin\BattleLobby\Helper\LobbyHelper::class);
     }
 
     public function isPhpCompatible(?int $versionId = null): bool
