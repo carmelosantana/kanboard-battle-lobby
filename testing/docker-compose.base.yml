@@ -1,0 +1,17 @@
+# Base (unthemed) Kanboard for Battle Lobby theme work: no other plugins loaded,
+# so captured HTML/screenshots show stock markup. Port 8082, own data volume.
+#   docker compose -f BattleLobby/testing/docker-compose.base.yml up -d
+name: kb-battlelobby
+
+services:
+  kanboard:
+    image: kanboard/kanboard:latest
+    container_name: kb-battlelobby
+    restart: unless-stopped
+    ports:
+      - "8082:80"
+    volumes:
+      - kb-battlelobby-data:/var/www/app/data
+
+volumes:
+  kb-battlelobby-data:

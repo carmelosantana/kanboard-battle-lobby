@@ -1,0 +1,8 @@
+local/
+prototype/
+research_notes/
+docs/research/
+.claude/
+testing/.env
+*.zip
+.DS_Store

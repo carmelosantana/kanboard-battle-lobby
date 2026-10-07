@@ -1,0 +1,14 @@
+{
+    "name": "BattleLobby",
+    "description": "Battle-royale lobby theme for Kanboard: original characters, rarity-tier cards, storm due dates, READY UP and a victory screen. Fan-made; not affiliated with any game publisher.",
+    "version": "1.0.0",
+    "author": "Carmelo Santana",
+    "license": "MIT",
+    "homepage": "https://github.com/carmelosantana/kanboard-battle-lobby",
+    "kanboard_version": ">=1.2.47",
+    "php_version": ">=8.4",
+    "recommends": [
+        { "plugin": "TimeReport", "min_version": "1.5.0", "reason": "adds quest-bar subtask progress, a milestone pass track and a level badge (the theme works fully without it)" }
+    ],
+    "conflicts": ["ShadcnTheme"]
+}

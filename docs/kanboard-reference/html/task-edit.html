@@ -1,0 +1,24 @@
+<div class="page-header">
+    <h2>[SEED] Project 1 &gt; [SEED] Task 1 (proj 1)</h2>
+</div>
+<form method="post" action="/task/1/update" autocomplete="off">
+    <input type="hidden" name="csrf_token" value="SCRUBBED"/>
+    <div class="task-form-container">
+        <div class="task-form-main-column">
+            <label for="form-title" class="ui-helper-hidden-accessible">Title</label><input type="text" name="title" id="form-title" value="[SEED] Task 1 (proj 1)" class="" autofocus required tabindex="1" placeholder="Title"><span class="form-required">*</span>            <div class="js-text-editor" data-params='{"name":"description","css":"","required":false,"tabindex":2,"labelPreview":"Preview","previewUrl":"\/?controller=TaskAjaxController&action=preview","labelWrite":"Write","labelTitle":"Title","placeholder":"Write your text in Markdown","ariaLabel":"Description","autofocus":false,"suggestOptions":{"triggers":{"#":"\/?controller=TaskAjaxController&action=suggest&search=SEARCH_TERM","@":"\/?controller=UserAjaxController&action=mention&project_id=1&search=SEARCH_TERM"}}}'><script type="text/template"></script></div>                        <label for="form-tags[]" >Tags</label><input type="hidden" name="tags[]" value=""><select name="tags[]" id="form-tags" class="tag-autocomplete" multiple tabindex="3"></select>
+                    </div>
+
+        <div class="task-form-secondary-column">
+            <label for="form-color_id" >Color</label><select name="color_id" id="form-color_id" class="color-picker" tabindex="4"><option value="yellow" selected="selected">Yellow</option><option value="blue">Blue</option><option value="green">Green</option><option value="purple">Purple</option><option value="red">Red</option><option value="orange">Orange</option><option value="grey">Grey</option><option value="brown">Brown</option><option value="deep_orange">Deep Orange</option><option value="dark_grey">Dark Grey</option><option value="pink">Pink</option><option value="teal">Teal</option><option value="cyan">Cyan</option><option value="lime">Lime</option><option value="light_green">Light Green</option><option value="amber">Amber</option></select>            <label for="form-owner_id" >Assignee</label><select name="owner_id" id="form-owner_id" class="" tabindex="5"><option value="0" selected="selected">Unassigned</option></select>&nbsp;<small><a href="#" class="assign-me" data-target-id="form-owner_id" data-current-id="1" title="Assign to me" aria-label="Assign to me">Me</a></small>            <label for="form-category_id" >Category</label><select name="category_id" id="form-category_id" class="" tabindex="6"><option value="0" selected="selected">No category</option><option value="1">Category A</option></select>            <label for="form-priority" >Priority</label><select name="priority" id="form-priority" class="" tabindex="9"><option value="0" selected="selected">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>
+                    </div>
+
+        <div class="task-form-secondary-column">
+            <label for="form-date_due" >Due Date</label><input type="text" name="date_due" id="form-date_due" value="" class="form-datetime" placeholder="10/06/2026 22:33" tabindex="10">            <label for="form-date_started" >Start Date</label><input type="text" name="date_started" id="form-date_started" value="" class="form-datetime" placeholder="10/06/2026 22:33" tabindex="11">            <label for="form-time_estimated" >Original estimate</label><input type="text" name="time_estimated" id="form-time_estimated" value="0" class=" form-numeric" tabindex="12"> hours            <label for="form-time_spent" >Time spent</label><input type="text" name="time_spent" id="form-time_spent" value="0" class=" form-numeric" tabindex="13"> hours            <label for="form-score" >Complexity</label><input type="number" name="score" id="form-score" value="0" class="" tabindex="14">            <label for="form-reference" >Reference</label><input type="text" name="reference" id="form-reference" value="" class="form-input-small" tabindex="15">
+                    </div>
+
+        <div class="task-form-bottom">
+
+            
+            <div class="js-submit-buttons" data-params='{"submitLabel":"Save","orLabel":"or","cancelLabel":"cancel","color":"blue","tabindex":null,"disabled":false}'></div>        </div>
+    </div>
+</form>
