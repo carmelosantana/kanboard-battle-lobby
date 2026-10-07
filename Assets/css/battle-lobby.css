@@ -101,3 +101,38 @@ html:not([data-bl-glass="0"]) #board td.board-column-expanded {
 .bl-storm-soon { background: rgba(176,77,249,.25); color: #e2b8ff; animation: bl-pulse 2s ease-in-out infinite; }
 .bl-storm-late { background: rgba(255,71,87,.25); color: #ff9aa5; }
 @keyframes bl-pulse { 50% { box-shadow: 0 0 0 4px rgba(176,77,249,.25); } }
+
+/* ===== Lobby stage ===== */
+.bl-stage { position: fixed; inset: auto 0 0 0; height: 0; z-index: 20; pointer-events: none; }
+.bl-lineup { position: fixed; left: 50%; bottom: 0; transform: translateX(-50%); display: flex; align-items: flex-end; height: min(40vh, 320px); }
+.bl-lineup::before { content: ""; position: absolute; left: -6%; right: -6%; bottom: -18px; height: 60px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(55,208,255,.55), rgba(55,208,255,.12) 70%, transparent); }
+.bl-mascot { position: fixed; right: 10px; bottom: 0; height: min(34vh, 280px); }
+.bl-char { position: relative; margin: 0 -22px; height: 100%; display: flex; align-items: flex-end; justify-content: center;
+  transform: translateX(calc(var(--bl-px, 0) * 1px)); transition: transform .25s var(--bl-ease); }
+.bl-mascot .bl-char { margin: 0; }
+.bl-char img { height: var(--bl-h, 100%); width: auto; transform-origin: 50% 100%; animation: bl-breathe 4.2s ease-in-out infinite; animation-delay: var(--bl-d, 0s);
+  filter: drop-shadow(-6px 0 10px rgba(55,208,255,.18)) drop-shadow(0 8px 14px rgba(0,0,0,.35)); }
+.bl-char::after { content: ""; position: absolute; bottom: -6px; left: 15%; right: 15%; height: 22px; border-radius: 50%; background: radial-gradient(closest-side, rgba(0,0,0,.55), transparent); }
+.bl-char-lead { z-index: 3; } .bl-char-side { --bl-h: 88%; z-index: 2; } .bl-char-back { --bl-h: 80%; z-index: 1; filter: brightness(.85); }
+.bl-char-tag { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); z-index: 4; white-space: nowrap; background: rgba(0,0,0,.65);
+  padding: 2px 10px; border-radius: 4px; font: 900 13px var(--bl-font-display); font-style: italic; text-transform: uppercase; color: var(--bl-text); }
+@keyframes bl-breathe { 50% { transform: scaleY(1.012) translateY(-2px); } }
+html[data-bl-motion="off"] .bl-char { transform: none; }
+#board-container { padding-bottom: min(40vh, 320px); }
+
+/* ===== Overlays ===== */
+.bl-overlay { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; background: rgba(5,8,20,.6); }
+.bl-victory { cursor: pointer; animation: bl-fade 2.6s forwards; }
+.bl-victory-box { text-align: center; animation: bl-pop .5s var(--bl-ease) both; }
+.bl-victory-box img { height: 300px; display: block; margin: 0 auto -30px; }
+.bl-victory-title { margin: 0; font: 900 96px/0.9 var(--bl-font-display); font-style: italic; color: var(--bl-cta); text-shadow: 0 2px 0 rgba(0,0,0,.35), 0 0 10px rgba(0,0,0,.5); }
+@keyframes bl-pop { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes bl-fade { 0%, 80% { opacity: 1; } 100% { opacity: 0; } }
+html[data-bl-motion="off"] .bl-victory { animation: none; }
+.bl-loading { background: var(--bl-bg) url("../backgrounds/island.webp") center / cover; place-items: end center; padding: 40px; }
+.bl-loading img { position: absolute; right: 4vw; bottom: 0; height: 70vh; }
+.bl-loading-tip { position: relative; background: var(--bl-glass); padding: 12px 16px; border-radius: var(--bl-radius); max-width: 640px; font-weight: 600; }
+.bl-loading-bar { position: relative; width: min(360px, 80vw); height: 10px; background: rgba(0,0,0,.5); transform: skew(var(--bl-skew)); overflow: hidden; }
+.bl-loading-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--bl-accent), var(--bl-cta)); animation: bl-load 4s var(--bl-ease) infinite; }
+@keyframes bl-load { 80%, 100% { width: 100%; } }

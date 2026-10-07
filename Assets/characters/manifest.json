@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "characters": {
+    "saffron": { "name": "Saffron", "set": "brawl" },
+    "sol-grande": { "name": "Sol Grande", "set": "brawl" },
+    "copperjab": { "name": "Copperjab", "set": "brawl" },
+    "glyph": { "name": "Glyph", "set": "brawl" },
+    "tundra": { "name": "Tundra", "set": "wild" },
+    "ironbraid": { "name": "Ironbraid", "set": "wild" },
+    "tabby-vance": { "name": "Tabby Vance", "set": "wild" },
+    "mikan": { "name": "Mikan", "set": "wild" },
+    "velvet": { "name": "Velvet", "set": "night" },
+    "ossian": { "name": "Ossian", "set": "night" },
+    "moonfang": { "name": "Moonfang", "set": "night" },
+    "lanternbone": { "name": "Lanternbone", "set": "night" }
+  },
+  "sets": {
+    "mixed": ["tabby-vance", "saffron", "tundra", "velvet"],
+    "brawl": ["sol-grande", "saffron", "glyph", "copperjab"],
+    "wild": ["tabby-vance", "tundra", "mikan", "ironbraid"],
+    "night": ["moonfang", "velvet", "ossian", "lanternbone"]
+  }
+}
