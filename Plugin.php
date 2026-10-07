@@ -34,6 +34,8 @@ class Plugin extends Base
         $this->route->addRoute('battlelobby/user/:user_id/save', 'OptionsController', 'userSave', 'BattleLobby');
         $this->route->addRoute('battlelobby/user/:user_id/reset', 'OptionsController', 'userReset', 'BattleLobby');
         $this->route->addRoute('battlelobby/ready-up', 'ReadyUpController', 'start', 'BattleLobby');
+        $this->route->addRoute('battlelobby/feed', 'FeedController', 'recent', 'BattleLobby');
+        $this->route->addRoute('battlelobby/thanks', 'FeedController', 'thanks', 'BattleLobby');
         $this->template->hook->attach('template:config:sidebar', 'BattleLobby:config/sidebar');
         $this->template->hook->attach('template:user:sidebar:actions', 'BattleLobby:user/sidebar');
         $this->template->hook->attach('template:board:private:task:before-title', 'BattleLobby:board/tier');

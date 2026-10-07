@@ -124,3 +124,9 @@ test('readPayload exposes the server-computed READY UP eligibility flag', () => 
   assert.equal(bl.readPayload({ blReadyupReady: '0' }).readyupReady, false);
   assert.equal(bl.readPayload({}).readyupReady, false);
 });
+
+test('toastText strips markup and clamps length', () => {
+  assert.equal(bl.toastText({ title: '<b>Alex</b> moved #4' }), 'Alex moved #4');
+  assert.equal(bl.toastText({ title: 'x'.repeat(200) }).length, 120);
+  assert.equal(bl.toastText({}), '');
+});

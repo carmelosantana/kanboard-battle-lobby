@@ -97,10 +97,16 @@
     return 'project_id=' + encodeURIComponent(projectId) + '&csrf_token=' + encodeURIComponent(csrf);
   }
 
+  /* Feed titles arrive as plain text from FeedController; strip any stray markup anyway and clamp. Set with textContent only. */
+  function toastText(event) {
+    var t = String((event && event.title) || '').replace(/<[^>]*>/g, '').trim();
+    return t.length > 120 ? t.slice(0, 120) : t;
+  }
+
   var api = { readPayload: readPayload, placementFor: placementFor, squadFor: squadFor, lineupOrder: lineupOrder,
     snapshotDone: snapshotDone, newArrivals: newArrivals, motionAllowed: motionAllowed, isBoardHref: isBoardHref,
     isCloseTaskAction: isCloseTaskAction, victoryPending: victoryPending, closeConfirmUrl: closeConfirmUrl, CONFIRM_BOX: CONFIRM_BOX,
-    readyUpBody: readyUpBody };
+    readyUpBody: readyUpBody, toastText: toastText };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = api; return; }
   root.BattleLobby = api;
@@ -276,6 +282,76 @@
     doc.body.appendChild(btn);
   }
 
+  /* Same project-id source as readyUp(): only the editable board carries data-project-id. */
+  function boardProjectId() {
+    var board = doc.querySelector('#board[data-project-id]');
+    return board ? board.getAttribute('data-project-id').replace(/\D+/g, '') : '';
+  }
+
+  function feed(p) {
+    var pid = boardProjectId();
+    if (!p.opts.feed || !pid || !p.urls.feed) return;
+    root.fetch(p.urls.feed + (p.urls.feed.indexOf('?') < 0 ? '?' : '&') + 'project_id=' + pid, { credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (!res.ok || !res.events || !res.events.length) return;
+        var box = el('div', 'bl-feed', { role: 'log', 'aria-live': 'polite' });
+        res.events.slice(0, 3).reverse().forEach(function (e, i) {
+          var t = el('div', 'bl-toast');
+          t.style.setProperty('animation-delay', (i * 0.6).toFixed(1) + 's'); /* CSSOM, not a style attribute: CSP-safe */
+          t.textContent = toastText(e);
+          box.appendChild(t);
+        });
+        doc.body.appendChild(box);
+        root.setTimeout(function () { if (box.parentNode) box.parentNode.removeChild(box); }, 8000);
+      })
+      .catch(function () {});
+  }
+
+  function thanksButton(p, card) {
+    var b = el('button', 'bl-thanks', { type: 'button', title: 'Say thanks', 'aria-label': 'Say thanks' });
+    b.textContent = '🙏';
+    b.addEventListener('click', function (e) {
+      e.preventDefault(); e.stopPropagation(); b.disabled = true;
+      root.fetch(p.urls.thanks, { method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
+        body: 'task_id=' + encodeURIComponent(card.getAttribute('data-task-id')) + '&csrf_token=' + encodeURIComponent(p.csrf) })
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+          if (res.ok || res.error === 'already_thanked') { b.textContent = 'GG'; return; }
+          if (res.error === 'forbidden') { if (b.parentNode) b.parentNode.removeChild(b); return; }
+          b.disabled = false;
+        })
+        .catch(function () { b.disabled = false; });
+    });
+    return b;
+  }
+
+  /* Cards in the last (done) column of each swimlane. Idempotent, so it can re-run after board re-renders. */
+  function decorateThanks(p) {
+    doc.querySelectorAll('#board[data-project-id] tr.board-swimlane').forEach(function (row) {
+      var lists = row.querySelectorAll('.board-task-list.board-column-expanded');
+      var last = lists[lists.length - 1];
+      if (!last) return;
+      last.querySelectorAll('.task-board[data-task-id]').forEach(function (card) {
+        if (!card.querySelector('.bl-thanks')) card.appendChild(thanksButton(p, card));
+      });
+    });
+  }
+
+  function thanks(p) {
+    var board = doc.getElementById('board-container');
+    if (!p.opts.thanks || !p.urls.thanks || !boardProjectId() || !board || !board.parentNode) return;
+    decorateThanks(p);
+    /* Board saves and polls replace #board-container: observe its parent (see watchVictory). */
+    var pending = false;
+    new root.MutationObserver(function () {
+      if (pending) return;
+      pending = true;
+      root.setTimeout(function () { pending = false; decorateThanks(p); }, 0);
+    }).observe(board.parentNode, { childList: true, subtree: true });
+  }
+
   function boot() {
     var mount = doc.getElementById('bl-stage') || doc.querySelector('.bl-hero[data-bl-assets]');
     if (!mount) return;
@@ -295,6 +371,8 @@
         loadingScreen(p, manifest);
         parallax(motionOk);
         readyUp(p);
+        feed(p);
+        thanks(p);
         root.dispatchEvent(new root.CustomEvent('battlelobby:ready', { detail: { payload: p, manifest: manifest } }));
       })
       .catch(function () { /* art is decoration: never break the page */ });
