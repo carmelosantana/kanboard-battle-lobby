@@ -166,9 +166,13 @@ html[data-bl-motion="off"] .bl-confetti { display: none; }
 .task-board { position: relative; }
 
 /* ===== Login hero ===== */
-.form-login { position: relative; z-index: 2; background: var(--bl-glass); padding: 24px; border-radius: var(--bl-radius); }
-html:not([data-bl-glass="0"]) .form-login { -webkit-backdrop-filter: blur(var(--bl-blur)); backdrop-filter: blur(var(--bl-blur)); }
-.bl-hero-title { font: 900 56px/0.9 var(--bl-font-display); font-style: italic; text-transform: uppercase; text-align: center; margin: 32px 0 16px;
+/* Glass lives on ::before: a backdrop-filter (even blur(0)) on .form-login itself would make the card the
+   containing block for the position:fixed mascot and trap it over the inputs. Keep .form-login filter/transform-free. */
+.form-login { position: relative; z-index: 2; padding: 24px; border-radius: var(--bl-radius); }
+.form-login::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--bl-glass); pointer-events: none; }
+html:not([data-bl-glass="0"]) .form-login::before { -webkit-backdrop-filter: blur(var(--bl-blur)); backdrop-filter: blur(var(--bl-blur)); }
+.bl-hero-stage { pointer-events: none; }
+.bl-hero-title { font: 900 clamp(32px, 9vw, 56px)/0.9 var(--bl-font-display); font-style: italic; text-transform: uppercase; text-align: center; margin: 32px 0 16px;
   text-shadow: 0 2px 0 rgba(0,0,0,.35), 0 0 10px rgba(0,0,0,.5); }
 .bl-hero-title small { display: block; font: 600 16px var(--bl-font-body); color: var(--bl-text-muted); text-shadow: none; text-transform: none; }
-.bl-hero-stage .bl-mascot { right: 4vw; height: min(70vh, 560px); }
+.bl-hero-stage .bl-mascot { z-index: -2; right: 4vw; height: min(70vh, 560px); } /* in .form-login's stacking context: behind the ::before glass */
