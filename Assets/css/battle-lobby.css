@@ -55,3 +55,7 @@ html[data-bl-motion="off"] *, html[data-bl-motion="off"] *::before, html[data-bl
 @media (prefers-reduced-motion: reduce) {
   html:not([data-bl-motion="on"]) *, html:not([data-bl-motion="on"]) *::before, html:not([data-bl-motion="on"]) *::after { animation: none !important; transition: none !important; }
 }
+
+/* ===== Options pages ===== */
+.bl-options label { display: block; margin-top: 10px; font-weight: 600; }
+.bl-options select, .bl-options input[type=number], .bl-options input[type=text] { min-width: 220px; }

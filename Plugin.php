@@ -25,6 +25,13 @@ class Plugin extends Base
         $this->hook->on('template:layout:js', ['template' => 'plugins/BattleLobby/Assets/js/battle-lobby.js']);
         $this->template->hook->attach('template:layout:head', 'BattleLobby:layout/head');
         $this->template->hook->attach('template:layout:top', 'BattleLobby:layout/conflict');
+        $this->route->addRoute('battlelobby/config', 'OptionsController', 'show', 'BattleLobby');
+        $this->route->addRoute('battlelobby/config/save', 'OptionsController', 'save', 'BattleLobby');
+        $this->route->addRoute('battlelobby/user/:user_id', 'OptionsController', 'user', 'BattleLobby');
+        $this->route->addRoute('battlelobby/user/:user_id/save', 'OptionsController', 'userSave', 'BattleLobby');
+        $this->route->addRoute('battlelobby/user/:user_id/reset', 'OptionsController', 'userReset', 'BattleLobby');
+        $this->template->hook->attach('template:config:sidebar', 'BattleLobby:config/sidebar');
+        $this->template->hook->attach('template:user:sidebar:actions', 'BattleLobby:user/sidebar');
     }
 
     public function isPhpCompatible(?int $versionId = null): bool
