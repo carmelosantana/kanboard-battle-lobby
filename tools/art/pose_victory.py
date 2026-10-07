@@ -11,8 +11,8 @@ POSES = {
     "saffron": "bowing with fist pressed to open palm, sash flying", "sol-grande": "flexing both arms overhead, cape flaring",
     "copperjab": "both gloves raised overhead in triumph", "glyph": "standing tall just after landing from a flip, one fist raised in victory, blade still sheathed on the back, visor line glowing",
     "tundra": "roaring with the axe raised overhead", "ironbraid": "slamming the maul into the ground, dust ring",
-    "tabby-vance": "standing upright after landing a backflip, grinning with a wink and a two-finger salute from the brow", "mikan": "crossing both blades, twin tails flaring",
-    "velvet": "sweeping the cape open with a burst of cartoon bats", "ossian": "a playful theatrical bow, one hand on his chest, the other holding the silver-tipped cane out to the side, grinning",
+    "tabby-vance": "crouched low just after landing from a grapple swing, one hand on the ground, the other giving a two-finger salute from the brow", "mikan": "crossing both blades, twin tails flaring",
+    "velvet": "still wearing her dark sunglasses but pulling them down to the tip of her nose with one finger, peeking over them with red eyes and a small smirk showing two tiny fangs, coffee cup raised in a toast", "ossian": "a playful theatrical bow, one hand on his chest, the other holding the silver-tipped cane out to the side, grinning",
     "moonfang": "howling joyfully at the sky", "lanternbone": "raising the glowing lantern staff high, cheering",
 }
 INSTRUCTION = ("Same character, same outfit, same face, same colours, same rendering style and lighting. Change only the pose: {pose}. "
