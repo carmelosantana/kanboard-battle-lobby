@@ -15,7 +15,8 @@ class LobbyHelper extends Base
 
     /**
      * Map a task priority onto tiers 0..4 using the project's own range.
-     * Ranges with ≤ 4 values map onto 0..3 (LEGENDARY needs a range wider than 4).
+     * Ranges with ≤ 4 values map onto 0..3. In wider ranges only the project's
+     * highest priority is LEGENDARY (4); the rest map onto 0..3.
      */
     public function tier(array $task, array $project): int
     {
@@ -26,8 +27,13 @@ class LobbyHelper extends Base
         }
         $priority = max($start, min($end, (int) ($task['priority'] ?? $start)));
         $span = $end - $start;
-        $top = $span + 1 > 4 ? 4 : 3;
-        return (int) round(($priority - $start) / $span * $top);
+        if ($span + 1 <= 4) {
+            return (int) round(($priority - $start) / $span * 3);
+        }
+        if ($priority === $end) {
+            return 4;
+        }
+        return (int) round(($priority - $start) / ($span - 1) * 3);
     }
 
     public function tierLabel(int $tier): string

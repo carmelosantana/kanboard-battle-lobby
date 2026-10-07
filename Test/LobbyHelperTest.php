@@ -38,6 +38,15 @@ class LobbyHelperTest extends Base
         $this->assertSame(3, $this->h()->tier(['priority' => 1], $p)); // top of a short range = EPIC, never LEGENDARY
     }
 
+    public function testTierUsesProjectRangeOnlyTopIsLegendary(): void
+    {
+        $p = ['priority_start' => 0, 'priority_end' => 8];
+        $this->assertSame(4, $this->h()->tier(['priority' => 8], $p));
+        $this->assertSame(3, $this->h()->tier(['priority' => 7], $p));
+        $this->assertSame(3, $this->h()->tier(['priority' => 9], ['priority_start' => 0, 'priority_end' => 10]));
+        $this->assertSame(4, $this->h()->tier(['priority' => 10], ['priority_start' => 0, 'priority_end' => 10]));
+    }
+
     public function testTierClampsOutOfRangeAndMissing(): void
     {
         $p = ['priority_start' => 0, 'priority_end' => 3];
