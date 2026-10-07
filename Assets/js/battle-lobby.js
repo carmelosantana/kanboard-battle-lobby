@@ -64,8 +64,28 @@
     return params.get('controller') === 'BoardViewController' && params.get('action') === 'show' && /^\d+$/.test(params.get('project_id') || '');
   }
 
+  /* The confirmed close-task request (task_status/close.php -> confirm-buttons -> KB.http.get(url)). Its
+     confirmation=yes param keeps it off the task/:task_id/close route, so core emits the query form; accept both. */
+  function isCloseTaskAction(url) {
+    var h = String(url || '').split('#')[0];
+    var q = h.indexOf('?');
+    if (q < 0) return false;
+    var params = new URLSearchParams(h.slice(q + 1));
+    if (params.get('confirmation') !== 'yes') return false;
+    if (/(?:^|\/)task\/\d+\/close\/?$/.test(h.slice(0, q))) return true;
+    return params.get('controller') === 'TaskStatusController' && params.get('action') === 'close';
+  }
+
+  var PENDING_TTL = 15000;
+  /* The flag is a timestamp: a close that failed and never redirected must not celebrate on a later page. */
+  function victoryPending(stored, now) {
+    var t = Number(stored);
+    return stored !== null && stored !== '' && isFinite(t) && now - t >= 0 && now - t <= PENDING_TTL;
+  }
+
   var api = { readPayload: readPayload, placementFor: placementFor, squadFor: squadFor, lineupOrder: lineupOrder,
-    snapshotDone: snapshotDone, newArrivals: newArrivals, motionAllowed: motionAllowed, isBoardHref: isBoardHref };
+    snapshotDone: snapshotDone, newArrivals: newArrivals, motionAllowed: motionAllowed, isBoardHref: isBoardHref,
+    isCloseTaskAction: isCloseTaskAction, victoryPending: victoryPending };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = api; return; }
   root.BattleLobby = api;
@@ -81,7 +101,7 @@
   }
 
   function charImg(p, slug, pose) {
-    return el('img', '', { src: p.assets + 'characters/' + slug + '-' + pose + '.webp', alt: '', decoding: 'async', loading: 'lazy', width: '300', height: '500' });
+    return el('img', '', { src: p.assets + 'characters/' + slug + '-' + pose + '.webp', alt: '', decoding: 'async', width: '300', height: '500' });
   }
 
   function applyRoot(p, motionOk) {
@@ -135,7 +155,15 @@
     var box = el('div', 'bl-victory-box');
     if (squad.length) box.appendChild(charImg(p, squad[Math.floor(Math.random() * squad.length)], 'victory'));
     var h = el('h1', 'bl-victory-title'); h.textContent = '#1 VICTORY';
-    box.appendChild(h); ov.appendChild(box); doc.body.appendChild(ov);
+    var confetti = el('div', 'bl-confetti', { 'aria-hidden': 'true' });
+    for (var i = 0; i < 18; i++) {
+      var bit = el('i');
+      bit.style.setProperty('--bl-cx', (Math.random() * 100).toFixed(1) + 'vw');
+      bit.style.setProperty('--bl-cd', (Math.random() * 0.6).toFixed(2) + 's');
+      bit.style.setProperty('--bl-cr', Math.round(Math.random() * 720 - 360) + 'deg');
+      confetti.appendChild(bit);
+    }
+    box.appendChild(h); ov.appendChild(confetti); ov.appendChild(box); doc.body.appendChild(ov);
     var remove = function () { if (ov.parentNode) ov.parentNode.removeChild(ov); };
     ov.addEventListener('click', remove);
     root.setTimeout(remove, doc.documentElement.getAttribute('data-bl-motion') === 'off' ? 900 : 2600);
@@ -154,14 +182,43 @@
     }).observe(board.parentNode, { childList: true, subtree: true });
   }
 
+  var PENDING_KEY = 'bl-victory-pending';
+  function store(fn) { try { return fn(root.sessionStorage); } catch (e) { return null; } }
+
+  /* Closing a task from the board redirects to the task page, so the board observer never sees it.
+     Flag the confirmed close here; boot() on the next page plays the victory once. */
+  function watchClose(p) {
+    if (!p.opts.victory || p.context !== 'board') return;
+    doc.addEventListener('click', function (e) {
+      var btn = e.target.closest && e.target.closest('#modal-confirm-button');
+      var box = btn && btn.closest('.js-confirm-buttons[data-params]');
+      if (!box) return;
+      var url = '';
+      try { url = JSON.parse(box.getAttribute('data-params')).url; } catch (err) { return; }
+      if (isCloseTaskAction(url)) store(function (s) { s.setItem(PENDING_KEY, String(Date.now())); });
+    }, true);
+  }
+
+  function consumePendingVictory(p, manifest) {
+    var v = store(function (s) { var x = s.getItem(PENDING_KEY); s.removeItem(PENDING_KEY); return x; });
+    if (p.opts.victory && victoryPending(v, Date.now())) victory(p, manifest);
+  }
+
+  function removeLoading() {
+    doc.querySelectorAll('.bl-loading').forEach(function (n) { n.parentNode.removeChild(n); });
+  }
+
   function loadingScreen(p, manifest) {
     if (!p.opts.loading) return;
+    /* Back/forward cache restores the page with the overlay still up: clear it. */
+    root.addEventListener('pageshow', function (e) { if (e.persisted) removeLoading(); });
     doc.addEventListener('click', function (e) {
       var a = e.target.closest && e.target.closest('a[href]');
       if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || a.target === '_blank') return;
       if (!isBoardHref(a.getAttribute('href'))) return;
       var timer = root.setTimeout(function () {
         var ov = el('div', 'bl-overlay bl-loading', { role: 'status' });
+        ov.addEventListener('click', removeLoading);
         var squad = squadFor(manifest, p.opts.characters);
         if (squad.length) ov.appendChild(charImg(p, squad[0], 'idle'));
         var tip = el('p', 'bl-loading-tip'); tip.textContent = 'TIP: press "?" on any board to see keyboard shortcuts.';
@@ -193,6 +250,8 @@
       .then(function (manifest) {
         renderStage(mount.id === 'bl-stage' ? mount : mount.querySelector('.bl-hero-stage') || mount, p, manifest);
         watchVictory(p, manifest);
+        watchClose(p);
+        consumePendingVictory(p, manifest);
         loadingScreen(p, manifest);
         parallax(motionOk);
         root.dispatchEvent(new root.CustomEvent('battlelobby:ready', { detail: { payload: p, manifest: manifest } }));

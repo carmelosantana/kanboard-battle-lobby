@@ -78,3 +78,25 @@ test('isBoardHref matches rewritten and query-string board URLs only', () => {
   assert.equal(bl.isBoardHref('#'), false);
   assert.equal(bl.isBoardHref(''), false);
 });
+
+test('isCloseTaskAction matches only the confirmed close-task URL, both URL forms', () => {
+  // Core renders the confirm URL with confirmation=yes, which the task/:task_id/close route cannot absorb, so it is the query form
+  assert.equal(bl.isCloseTaskAction('/kanboard/?controller=TaskStatusController&action=close&task_id=5&confirmation=yes&csrf_token=abc'), true);
+  assert.equal(bl.isCloseTaskAction('?csrf_token=x&confirmation=yes&task_id=5&action=close&controller=TaskStatusController'), true);
+  assert.equal(bl.isCloseTaskAction('/task/5/close?confirmation=yes&csrf_token=abc'), true);
+  // The link that only opens the confirmation modal, and other actions
+  assert.equal(bl.isCloseTaskAction('/task/5/close'), false);
+  assert.equal(bl.isCloseTaskAction('?controller=TaskStatusController&action=close&task_id=5'), false);
+  assert.equal(bl.isCloseTaskAction('?controller=TaskStatusController&action=open&task_id=5&confirmation=yes'), false);
+  assert.equal(bl.isCloseTaskAction('?controller=TaskSuppressionController&action=remove&task_id=5&confirmation=yes'), false);
+  assert.equal(bl.isCloseTaskAction(''), false);
+});
+
+test('victoryPending accepts only a recent numeric flag', () => {
+  assert.equal(bl.victoryPending('1000', 5000), true);
+  assert.equal(bl.victoryPending('1000', 1000 + 15000), true);
+  assert.equal(bl.victoryPending('1000', 1000 + 15001), false); // close failed long ago: no stale celebration
+  assert.equal(bl.victoryPending(null, 5000), false);
+  assert.equal(bl.victoryPending('junk', 5000), false);
+  assert.equal(bl.victoryPending('9000', 5000), false);
+});

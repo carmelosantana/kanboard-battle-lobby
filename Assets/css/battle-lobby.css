@@ -130,6 +130,19 @@ html[data-bl-motion="off"] .bl-char { transform: none; }
 @keyframes bl-pop { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes bl-fade { 0%, 80% { opacity: 1; } 100% { opacity: 0; } }
 html[data-bl-motion="off"] .bl-victory { animation: none; }
+.bl-confetti { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.bl-confetti i { position: absolute; top: -20px; left: var(--bl-cx, 50vw); width: 10px; height: 16px; background: var(--bl-cta); opacity: 0;
+  animation: bl-confetti-fall 2.5s var(--bl-cd, 0s) cubic-bezier(.3, .6, .5, 1) forwards; }
+.bl-confetti i:nth-child(4n+1) { background: var(--bl-accent); }
+.bl-confetti i:nth-child(4n+2) { background: var(--bl-storm); width: 8px; height: 12px; }
+.bl-confetti i:nth-child(4n+3) { background: var(--bl-health); }
+@keyframes bl-confetti-fall {
+  0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+  85% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(105vh) rotate(var(--bl-cr, 360deg)); }
+}
+html[data-bl-motion="off"] .bl-confetti { display: none; }
+@media (prefers-reduced-motion: reduce) { html:not([data-bl-motion="on"]) .bl-confetti { display: none; } }
 .bl-loading { background: var(--bl-bg) url("../backgrounds/island.webp") center / cover; place-items: end center; padding: 40px; }
 .bl-loading img { position: absolute; right: 4vw; bottom: 0; height: 70vh; }
 .bl-loading-tip { position: relative; background: var(--bl-glass); padding: 12px 16px; border-radius: var(--bl-radius); max-width: 640px; font-weight: 600; }
