@@ -42,6 +42,7 @@ class Plugin extends Base
         $this->template->hook->attach('template:board:public:task:before-title', 'BattleLobby:board/tier');
         $this->template->hook->attach('template:board:task:footer', 'BattleLobby:board/storm');
         $this->template->hook->attach('template:layout:bottom', 'BattleLobby:layout/stage');
+        $this->template->hook->attach('template:auth:login-form:before', 'BattleLobby:auth/hero');
     }
 
     public function isPhpCompatible(?int $versionId = null): bool
