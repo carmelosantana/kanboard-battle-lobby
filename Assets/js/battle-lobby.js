@@ -76,6 +76,15 @@
     return params.get('controller') === 'TaskStatusController' && params.get('action') === 'close';
   }
 
+  /* The confirm-buttons container: KB.render() (core/base.js) renames .js-confirm-buttons to .js-confirm-buttons-rendered. */
+  var CONFIRM_BOX = '.js-confirm-buttons-rendered[data-params], .js-confirm-buttons[data-params]';
+
+  function closeConfirmUrl(paramsJson) {
+    var url = '';
+    try { url = String(JSON.parse(paramsJson).url || ''); } catch (e) { return ''; }
+    return isCloseTaskAction(url) ? url : '';
+  }
+
   var PENDING_TTL = 15000;
   /* The flag is a timestamp: a close that failed and never redirected must not celebrate on a later page. */
   function victoryPending(stored, now) {
@@ -85,7 +94,7 @@
 
   var api = { readPayload: readPayload, placementFor: placementFor, squadFor: squadFor, lineupOrder: lineupOrder,
     snapshotDone: snapshotDone, newArrivals: newArrivals, motionAllowed: motionAllowed, isBoardHref: isBoardHref,
-    isCloseTaskAction: isCloseTaskAction, victoryPending: victoryPending };
+    isCloseTaskAction: isCloseTaskAction, victoryPending: victoryPending, closeConfirmUrl: closeConfirmUrl, CONFIRM_BOX: CONFIRM_BOX };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = api; return; }
   root.BattleLobby = api;
@@ -191,17 +200,15 @@
     if (!p.opts.victory || p.context !== 'board') return;
     doc.addEventListener('click', function (e) {
       var btn = e.target.closest && e.target.closest('#modal-confirm-button');
-      var box = btn && btn.closest('.js-confirm-buttons[data-params]');
-      if (!box) return;
-      var url = '';
-      try { url = JSON.parse(box.getAttribute('data-params')).url; } catch (err) { return; }
-      if (isCloseTaskAction(url)) store(function (s) { s.setItem(PENDING_KEY, String(Date.now())); });
+      var box = btn && btn.closest(CONFIRM_BOX);
+      if (box && closeConfirmUrl(box.getAttribute('data-params'))) store(function (s) { s.setItem(PENDING_KEY, String(Date.now())); });
     }, true);
   }
 
-  function consumePendingVictory(p, manifest) {
+  /* Read and clear synchronously at boot, so the flag is consumed even when the manifest fetch fails. */
+  function consumePendingVictory() {
     var v = store(function (s) { var x = s.getItem(PENDING_KEY); s.removeItem(PENDING_KEY); return x; });
-    if (p.opts.victory && victoryPending(v, Date.now())) victory(p, manifest);
+    return victoryPending(v, Date.now());
   }
 
   function removeLoading() {
@@ -245,13 +252,14 @@
     var reduced = root.matchMedia && root.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var motionOk = motionAllowed(p.opts.motion, reduced);
     applyRoot(p, motionOk);
+    var pendingVictory = consumePendingVictory();
     root.fetch(p.assets + 'characters/manifest.json', { credentials: 'same-origin' })
       .then(function (r) { return r.ok ? r.json() : { characters: {}, sets: {} }; })
       .then(function (manifest) {
         renderStage(mount.id === 'bl-stage' ? mount : mount.querySelector('.bl-hero-stage') || mount, p, manifest);
         watchVictory(p, manifest);
         watchClose(p);
-        consumePendingVictory(p, manifest);
+        if (pendingVictory && p.opts.victory) victory(p, manifest);
         loadingScreen(p, manifest);
         parallax(motionOk);
         root.dispatchEvent(new root.CustomEvent('battlelobby:ready', { detail: { payload: p, manifest: manifest } }));

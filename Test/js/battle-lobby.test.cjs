@@ -100,3 +100,17 @@ test('victoryPending accepts only a recent numeric flag', () => {
   assert.equal(bl.victoryPending('junk', 5000), false);
   assert.equal(bl.victoryPending('9000', 5000), false);
 });
+
+test('closeConfirmUrl reads the close URL from a confirm-buttons data-params value', () => {
+  const close = '/?controller=TaskStatusController&action=close&task_id=5&confirmation=yes&csrf_token=abc';
+  assert.equal(bl.closeConfirmUrl(JSON.stringify({ url: close, submitLabel: 'Yes' })), close);
+  assert.equal(bl.closeConfirmUrl(JSON.stringify({ url: '/?controller=TaskSuppressionController&action=remove&task_id=5&confirmation=yes' })), '');
+  assert.equal(bl.closeConfirmUrl('{not json'), '');
+  assert.equal(bl.closeConfirmUrl(null), '');
+});
+
+test('CONFIRM_BOX matches the container both before and after KB.render renames it', () => {
+  // core/base.js KB.render(): className + '-rendered' after rendering every component
+  assert.match(bl.CONFIRM_BOX, /\.js-confirm-buttons-rendered\[data-params\]/);
+  assert.match(bl.CONFIRM_BOX, /\.js-confirm-buttons\[data-params\]/);
+});
