@@ -92,9 +92,14 @@
     return stored !== null && stored !== '' && isFinite(t) && now - t >= 0 && now - t <= PENDING_TTL;
   }
 
+  function readyUpBody(projectId, csrf) {
+    return 'project_id=' + encodeURIComponent(projectId) + '&csrf_token=' + encodeURIComponent(csrf);
+  }
+
   var api = { readPayload: readPayload, placementFor: placementFor, squadFor: squadFor, lineupOrder: lineupOrder,
     snapshotDone: snapshotDone, newArrivals: newArrivals, motionAllowed: motionAllowed, isBoardHref: isBoardHref,
-    isCloseTaskAction: isCloseTaskAction, victoryPending: victoryPending, closeConfirmUrl: closeConfirmUrl, CONFIRM_BOX: CONFIRM_BOX };
+    isCloseTaskAction: isCloseTaskAction, victoryPending: victoryPending, closeConfirmUrl: closeConfirmUrl, CONFIRM_BOX: CONFIRM_BOX,
+    readyUpBody: readyUpBody };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = api; return; }
   root.BattleLobby = api;
@@ -244,6 +249,32 @@
     }, { passive: true });
   }
 
+  function readyUp(p) {
+    // Only the editable board carries data-project-id (core board/table_container.php);
+    // the public read-only board does not, so anonymous visitors get no CTA.
+    var board = doc.querySelector('#board[data-project-id]');
+    if (!board || !p.opts.readyup) return;
+    var pid = board.getAttribute('data-project-id').replace(/\D+/g, '');
+    if (!pid) return;
+    var btn = el('button', 'bl-cta', { type: 'button' });
+    btn.textContent = 'READY UP';
+    btn.addEventListener('click', function () {
+      btn.disabled = true;
+      root.fetch(p.urls.readyup, { method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
+        body: readyUpBody(pid, p.csrf) })
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+          if (res.ok) { root.location.reload(); return; }
+          btn.disabled = false;
+          btn.textContent = { nothing_ready: 'NOTHING READY', no_ready_column: 'NO READY COLUMN', ready_is_last: 'READY IS LAST', forbidden: 'NO ACCESS' }[res.error] || 'TRY AGAIN';
+          root.setTimeout(function () { btn.textContent = 'READY UP'; }, 2500);
+        })
+        .catch(function () { btn.disabled = false; });
+    });
+    doc.body.appendChild(btn);
+  }
+
   function boot() {
     var mount = doc.getElementById('bl-stage') || doc.querySelector('.bl-hero[data-bl-assets]');
     if (!mount) return;
@@ -262,6 +293,7 @@
         if (pendingVictory && p.opts.victory) victory(p, manifest);
         loadingScreen(p, manifest);
         parallax(motionOk);
+        readyUp(p);
         root.dispatchEvent(new root.CustomEvent('battlelobby:ready', { detail: { payload: p, manifest: manifest } }));
       })
       .catch(function () { /* art is decoration: never break the page */ });

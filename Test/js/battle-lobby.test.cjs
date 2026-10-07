@@ -114,3 +114,7 @@ test('CONFIRM_BOX matches the container both before and after KB.render renames 
   assert.match(bl.CONFIRM_BOX, /\.js-confirm-buttons-rendered\[data-params\]/);
   assert.match(bl.CONFIRM_BOX, /\.js-confirm-buttons\[data-params\]/);
 });
+
+test('readyUpBody encodes project and token', () => {
+  assert.equal(bl.readyUpBody('7', 'a b&c'), 'project_id=7&csrf_token=a%20b%26c');
+});

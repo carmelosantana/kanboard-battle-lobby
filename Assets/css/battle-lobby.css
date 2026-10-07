@@ -149,3 +149,11 @@ html[data-bl-motion="off"] .bl-confetti { display: none; }
 .bl-loading-bar { position: relative; width: min(360px, 80vw); height: 10px; background: rgba(0,0,0,.5); transform: skew(var(--bl-skew)); overflow: hidden; }
 .bl-loading-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--bl-accent), var(--bl-cta)); animation: bl-load 4s var(--bl-ease) infinite; }
 @keyframes bl-load { 80%, 100% { width: 100%; } }
+
+/* ===== READY UP ===== */
+.bl-cta { position: fixed; right: 28px; bottom: 28px; z-index: 30; background: var(--bl-cta); color: var(--bl-text-on-cta); border: 0;
+  padding: 12px 28px; font: 900 26px var(--bl-font-display); font-style: italic; text-transform: uppercase; clip-path: var(--bl-cta-clip); cursor: pointer;
+  transition: transform var(--bl-dur) var(--bl-ease), background var(--bl-dur); }
+.bl-cta:hover { background: var(--bl-cta-hover); transform: scale(1.04); }
+.bl-cta:focus-visible { clip-path: none; outline: 3px solid var(--bl-accent); outline-offset: 4px; } /* clip-path would clip the outline */
+.bl-cta[disabled] { opacity: .7; cursor: progress; }
