@@ -13,6 +13,7 @@
     return {
       context: ds.blContext || 'page', assets: ds.blAssets || '', csrf: ds.blCsrf || '',
       urls: { readyup: ds.blReadyupUrl || '', feed: ds.blFeedUrl || '', thanks: ds.blThanksUrl || '' },
+      readyupReady: ds.blReadyupReady === '1',
       opts: opts,
     };
   }
@@ -253,7 +254,7 @@
     // Only the editable board carries data-project-id (core board/table_container.php);
     // the public read-only board does not, so anonymous visitors get no CTA.
     var board = doc.querySelector('#board[data-project-id]');
-    if (!board || !p.opts.readyup) return;
+    if (!board || !p.opts.readyup || !p.readyupReady) return; // server: you may move, and a task of yours is in Ready
     var pid = board.getAttribute('data-project-id').replace(/\D+/g, '');
     if (!pid) return;
     var btn = el('button', 'bl-cta', { type: 'button' });

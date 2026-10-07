@@ -5,6 +5,11 @@ require_once 'tests/units/Base.php';
 use KanboardTests\units\Base;
 use Kanboard\Plugin\BattleLobby\Helper\LobbyHelper;
 use Kanboard\Plugin\BattleLobby\Model\OptionsModel;
+use Kanboard\Plugin\BattleLobby\Model\ReadyUpModel;
+use Kanboard\Core\Http\Request;
+use Kanboard\Core\Security\Role;
+use Kanboard\Model\TaskCreationModel;
+use Kanboard\Model\UserModel;
 
 class LobbyHelperTest extends Base
 {
@@ -12,6 +17,13 @@ class LobbyHelperTest extends Base
     {
         parent::setUp();
         $this->container['battleLobbyOptions'] = fn ($c) => new OptionsModel($c);
+        $this->container['battleLobbyReadyUp'] = fn ($c) => new ReadyUpModel($c);
+    }
+
+    protected function tearDown(): void
+    {
+        unset($_SESSION['user']);
+        parent::tearDown();
     }
 
     private function h(): LobbyHelper
@@ -101,5 +113,38 @@ class LobbyHelperTest extends Base
         $this->assertSame('cache', $h->project($pid)['name']);
         $this->assertSame([], $h->project(0));
         $this->assertSame('mixed', $h->options(null)['characters']);
+    }
+
+    /** Board page for a logged-in user with $role on a project; $owned = a task of theirs sits in Ready. */
+    private function boardPayload(string $role, bool $owned): string
+    {
+        $uid = (new UserModel($this->container))->create(['username' => 'runner']);
+        $pid = $this->container['projectModel']->create(['name' => 'Squad']);
+        $ready = array_column($this->container['columnModel']->getAll($pid), 'id', 'title')['Ready'];
+        (new TaskCreationModel($this->container))->create(['project_id' => $pid, 'title' => 't', 'column_id' => $ready, 'owner_id' => $owned ? $uid : 0]);
+        $this->container['projectUserRoleModel']->addUser($pid, $uid, $role);
+        $_SESSION['user'] = ['id' => $uid, 'role' => Role::APP_USER, 'username' => 'runner'];
+        $this->container['request'] = new Request($this->container, ['REQUEST_METHOD' => 'GET'], ['project_id' => (string) $pid], []);
+        return $this->h()->payloadAttributes($uid, 'page');
+    }
+
+    public function testReadyupReadyFlagWhenEligible(): void
+    {
+        $this->assertStringContainsString('data-bl-readyup-ready="1"', $this->boardPayload(Role::PROJECT_MEMBER, true));
+    }
+
+    public function testReadyupReadyFlagOffWhenNothingReady(): void
+    {
+        $this->assertStringNotContainsString('data-bl-readyup-ready="1"', $this->boardPayload(Role::PROJECT_MEMBER, false));
+    }
+
+    public function testReadyupReadyFlagOffForAViewer(): void
+    {
+        $this->assertStringNotContainsString('data-bl-readyup-ready="1"', $this->boardPayload(Role::PROJECT_VIEWER, true));
+    }
+
+    public function testReadyupReadyFlagOffWithoutAProject(): void
+    {
+        $this->assertStringNotContainsString('data-bl-readyup-ready="1"', $this->h()->payloadAttributes(null, 'page'));
     }
 }

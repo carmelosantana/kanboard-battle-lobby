@@ -70,14 +70,26 @@ class LobbyHelper extends Base
             'thanks-url' => $this->helper->url->to('FeedController', 'thanks', ['plugin' => 'BattleLobby']),
             'csrf' => $this->token->getReusableCSRFToken(),
         ];
-        foreach ($this->container['battleLobbyOptions']->resolve($userId) as $key => $value) {
+        $options = $this->container['battleLobbyOptions']->resolve($userId);
+        foreach ($options as $key => $value) {
             $attrs[$key] = is_bool($value) ? ($value ? '1' : '0') : (string) $value;
         }
+        $attrs['readyup-ready'] = $this->readyUpReady($userId, $options) ? '1' : '0';
         $out = [];
         foreach ($attrs as $key => $value) {
             $out[] = sprintf('data-bl-%s="%s"', $key, htmlspecialchars($value, ENT_QUOTES, 'UTF-8'));
         }
         return implode(' ', $out);
+    }
+
+    /** One eligibility check per page render (payloadAttributes runs once, in the stage hook), never per card. */
+    private function readyUpReady(?int $userId, array $options): bool
+    {
+        $projectId = $this->request->getIntegerParam('project_id');
+        if (! $userId || ! $projectId || empty($options['readyup'])) {
+            return false;
+        }
+        return ! isset($this->container['battleLobbyReadyUp']->eligible($projectId, $userId)['error']);
     }
 
     /** @var array<int,array> */

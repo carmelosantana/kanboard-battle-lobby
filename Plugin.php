@@ -18,6 +18,9 @@ class Plugin extends Base
         $this->container['battleLobbyOptions'] = function ($c) {
             return new \Kanboard\Plugin\BattleLobby\Model\OptionsModel($c);
         };
+        $this->container['battleLobbyReadyUp'] = function ($c) {
+            return new \Kanboard\Plugin\BattleLobby\Model\ReadyUpModel($c);
+        };
 
         $this->helper->register('battleLobby', \Kanboard\Plugin\BattleLobby\Helper\LobbyHelper::class);
 

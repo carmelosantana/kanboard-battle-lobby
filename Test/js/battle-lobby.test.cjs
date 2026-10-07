@@ -118,3 +118,9 @@ test('CONFIRM_BOX matches the container both before and after KB.render renames 
 test('readyUpBody encodes project and token', () => {
   assert.equal(bl.readyUpBody('7', 'a b&c'), 'project_id=7&csrf_token=a%20b%26c');
 });
+
+test('readPayload exposes the server-computed READY UP eligibility flag', () => {
+  assert.equal(bl.readPayload({ blReadyupReady: '1' }).readyupReady, true);
+  assert.equal(bl.readPayload({ blReadyupReady: '0' }).readyupReady, false);
+  assert.equal(bl.readPayload({}).readyupReady, false);
+});

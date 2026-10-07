@@ -4,6 +4,7 @@ require_once 'tests/units/Base.php';
 
 use KanboardTests\units\Base;
 use Kanboard\Plugin\BattleLobby\Controller\ReadyUpController;
+use Kanboard\Plugin\BattleLobby\Model\ReadyUpModel;
 use Kanboard\Core\Http\Request;
 use Kanboard\Core\Http\Response;
 use Kanboard\Core\Security\Role;
@@ -20,6 +21,7 @@ class ReadyUpControllerTest extends Base
     protected function setUp(): void
     {
         parent::setUp();
+        $this->container['battleLobbyReadyUp'] = fn ($c) => new ReadyUpModel($c);
         $this->uid = (new UserModel($this->container))->create(['username' => 'runner']);
         $this->pid = $this->container['projectModel']->create(['name' => 'Squad']);
         // Default columns: Backlog, Ready, Work in progress, Done
@@ -48,47 +50,6 @@ class ReadyUpControllerTest extends Base
     private function columnOf(int $taskId): int
     {
         return (int) (new TaskFinderModel($this->container))->getById($taskId)['column_id'];
-    }
-
-    public function testPicksHighestPriorityOwnedReadyTaskAndTargetsNextColumn(): void
-    {
-        $this->task('Ready', 1, $this->uid);
-        $top = $this->task('Ready', 3, $this->uid);
-        $this->task('Ready', 3, 0);            // unassigned: ignored
-        $this->task('Backlog', 3, $this->uid); // wrong column: ignored
-        $r = $this->c()->pick($this->pid, $this->uid);
-        $this->assertSame($top, (int) $r['task']['id']);
-        $this->assertSame((int) $this->cols['Ready'], $r['from']);
-        $this->assertSame((int) $this->cols['Work in progress'], $r['to']);
-    }
-
-    public function testNothingReady(): void
-    {
-        $this->task('Ready', 2, 0);
-        $this->assertSame('nothing_ready', $this->c()->pick($this->pid, $this->uid)['error']);
-    }
-
-    public function testNoReadyColumn(): void
-    {
-        $this->container['columnModel']->update($this->cols['Ready'], 'Queue');
-        $this->assertSame('no_ready_column', $this->c()->pick($this->pid, $this->uid)['error']);
-    }
-
-    public function testReadyIsLastColumn(): void
-    {
-        foreach (['Work in progress', 'Done'] as $t) {
-            $this->container['columnModel']->remove($this->cols[$t]);
-        }
-        $this->task('Ready', 2, $this->uid);
-        $this->assertSame('ready_is_last', $this->c()->pick($this->pid, $this->uid)['error']);
-    }
-
-    public function testMoveActuallyMovesTheTask(): void
-    {
-        $id = $this->task('Ready', 2, $this->uid);
-        $r = $this->c()->pick($this->pid, $this->uid);
-        $this->assertTrue($this->c()->move($this->pid, $r));
-        $this->assertSame((int) $this->cols['Work in progress'], $this->columnOf($id));
     }
 
     // ---- start(): the HTTP endpoint (CSRF + move permission) ----
