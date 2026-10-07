@@ -15,6 +15,9 @@ class Plugin extends Base
 {
     public function initialize(): void
     {
+        $this->container['battleLobbyOptions'] = function ($c) {
+            return new \Kanboard\Plugin\BattleLobby\Model\OptionsModel($c);
+        };
     }
 
     public function isPhpCompatible(?int $versionId = null): bool
