@@ -12,6 +12,8 @@ class OptionsModel extends Base
 {
     public const CONFIG_KEY = 'battlelobby_options';
     public const META_KEY = 'battlelobby_options';
+    /** memoryCache key for resolve() results, keyed by user id (0 = anonymous). */
+    private const MEMO_KEY = 'battlelobby:resolved';
 
     public function schema(): array
     {
@@ -79,6 +81,7 @@ class OptionsModel extends Base
         $saved = (bool) $this->configModel->save([self::CONFIG_KEY => json_encode($this->validate($input))]);
         // ConfigModel::get() reads through memoryCache->proxy(); evict it so same-request reads see the save.
         $this->memoryCache->remove('proxy:' . get_class($this->configModel) . ':getAll');
+        $this->memoryCache->remove(self::MEMO_KEY);
         return $saved;
     }
 
@@ -89,21 +92,41 @@ class OptionsModel extends Base
 
     public function saveUser(int $userId, array $input): bool
     {
+        $this->forget($userId);
         return (bool) $this->userMetadataModel->save($userId, [self::META_KEY => json_encode($this->validate($input))]);
     }
 
     public function resetUser(int $userId): bool
     {
+        $this->forget($userId);
         return (bool) $this->userMetadataModel->save($userId, [self::META_KEY => '{}']);
     }
 
+    /**
+     * Memoized per user for the request (the board renders this once per card).
+     * The memo lives in the container's memoryCache, not on this instance, so a
+     * save through any OptionsModel instance invalidates it.
+     */
     public function resolve(?int $userId): array
     {
-        $values = array_replace($this->defaults(), $this->adminValues());
-        if ($userId) {
-            $values = array_replace($values, $this->userValues($userId));
+        $uid = (int) $userId;
+        $memo = $this->memoryCache->get(self::MEMO_KEY) ?? [];
+        if (! isset($memo[$uid])) {
+            $values = array_replace($this->defaults(), $this->adminValues());
+            if ($uid) {
+                $values = array_replace($values, $this->userValues($uid));
+            }
+            $memo[$uid] = $values;
+            $this->memoryCache->set(self::MEMO_KEY, $memo);
         }
-        return $values;
+        return $memo[$uid];
+    }
+
+    private function forget(int $userId): void
+    {
+        $memo = $this->memoryCache->get(self::MEMO_KEY) ?? [];
+        unset($memo[$userId]);
+        $this->memoryCache->set(self::MEMO_KEY, $memo);
     }
 
     /** Decode stored JSON and re-validate it; anything malformed yields []. */

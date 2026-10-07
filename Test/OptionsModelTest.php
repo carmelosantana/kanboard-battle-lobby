@@ -71,4 +71,38 @@ class OptionsModelTest extends Base
         $r = $this->model()->resolve($userId);
         $this->assertSame($this->model()->defaults(), $r);
     }
+
+    public function testSaveUserAfterResolveIsVisible(): void
+    {
+        $userId = $this->container['userModel']->create(['username' => 'memo-a']);
+        $m = $this->model();
+        $m->saveUser($userId, ['background' => 'storm']);
+        $this->assertSame('storm', $m->resolve($userId)['background']);
+        $m->saveUser($userId, ['background' => 'island']);
+        $this->assertSame('island', $m->resolve($userId)['background']);
+        $m->resetUser($userId);
+        $this->assertSame('map', $m->resolve($userId)['background']);
+    }
+
+    public function testRepeatedResolveIsMemoizedUntilSave(): void
+    {
+        $userId = $this->container['userModel']->create(['username' => 'memo-b']);
+        $m = $this->model();
+        $m->saveUser($userId, ['blur' => 4]);
+        $this->assertSame(4, $m->resolve($userId)['blur']);
+        // Bypass the model: a memoized resolve must not re-read user_has_metadata.
+        $this->container['userMetadataModel']->save($userId, [OptionsModel::META_KEY => '{"blur":20}']);
+        $this->assertSame(4, $m->resolve($userId)['blur']);
+        $m->saveUser($userId, ['blur' => 8]);
+        $this->assertSame(8, $m->resolve($userId)['blur']);
+    }
+
+    public function testSaveAdminOnAnotherInstanceInvalidatesMemo(): void
+    {
+        $m = $this->model();
+        $this->assertTrue($m->resolve(null)['storm']);
+        $this->model()->saveAdmin(['storm' => false]);
+        $this->assertFalse($m->resolve(null)['storm']);
+        $this->assertFalse($m->resolve(0)['storm']);
+    }
 }
