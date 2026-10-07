@@ -20,6 +20,11 @@ class Plugin extends Base
         };
 
         $this->helper->register('battleLobby', \Kanboard\Plugin\BattleLobby\Helper\LobbyHelper::class);
+
+        $this->hook->on('template:layout:css', ['template' => 'plugins/BattleLobby/Assets/css/battle-lobby.css']);
+        $this->hook->on('template:layout:js', ['template' => 'plugins/BattleLobby/Assets/js/battle-lobby.js']);
+        $this->template->hook->attach('template:layout:head', 'BattleLobby:layout/head');
+        $this->template->hook->attach('template:layout:top', 'BattleLobby:layout/conflict');
     }
 
     public function isPhpCompatible(?int $versionId = null): bool
