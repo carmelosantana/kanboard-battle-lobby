@@ -1,11 +1,12 @@
 """Render each character's victory pose from its approved idle hero with Qwen-Image-Edit-2509, then cut out with BiRefNet.
+ComfyUI: set COMFYUI_URL=http://host:8188 (default http://127.0.0.1:8188).
 Polite on the shared GPU: waits for an empty queue before every prompt, never interrupts.
 Usage: python3 tools/art/pose_victory.py [slug ...]   (reads tools/art/out/<slug>.png, writes tools/art/out/<slug>-victory.png)
 Re-roll one slug: SEED_OFFSET=n python3 tools/art/pose_victory.py <slug>   (the final seed is recorded in victory.json)"""
 import io, json, os, sys, time, urllib.parse, urllib.request, uuid
 from PIL import Image
 
-BASE = os.environ.get("COMFYUI_URL", "http://192.168.1.141:8188")
+BASE = os.environ.get("COMFYUI_URL", "http://127.0.0.1:8188")
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out")
 POSES = {
     "saffron": "bowing with fist pressed to open palm, sash flying", "sol-grande": "flexing both arms overhead, cape flaring",

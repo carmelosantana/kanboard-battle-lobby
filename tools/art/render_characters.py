@@ -1,13 +1,14 @@
 """Render the original Battle Lobby roster (hero idle pose) and cut each out to a transparent PNG.
 
 Qwen-Image (Lightning 4-step) on a mid-grey background -> BiRefNet mask -> PIL alpha composite + trim.
+ComfyUI: set COMFYUI_URL=http://host:8188 (default http://127.0.0.1:8188).
 Polite on the shared GPU: waits for an empty queue before every prompt, never interrupts.
 Usage: python3 tools/art/render_characters.py [slug ...]   (SEED_OFFSET=n re-rolls; writes tools/art/out/)
 """
 import io, json, os, sys, time, urllib.parse, urllib.request, uuid
 from PIL import Image
 
-BASE = os.environ.get("COMFYUI_URL", "http://192.168.1.141:8188")
+BASE = os.environ.get("COMFYUI_URL", "http://127.0.0.1:8188")
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out")
 SUFFIX = (" Stylized 3D video game character render, unified toon-PBR style: soft physically based materials with clean "
           "low-frequency painted textures, bevelled chunky shapes, heroic stylized proportions about seven heads tall, flat "
