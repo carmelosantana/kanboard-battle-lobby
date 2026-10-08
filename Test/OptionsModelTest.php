@@ -39,6 +39,13 @@ class OptionsModelTest extends Base
         $this->assertSame(['characters' => 'night', 'glass' => false, 'blur' => 24, 'tint' => 0.6, 'feed' => true], $v);
     }
 
+    public function testValidateAcceptsADecimalCommaForFloats(): void
+    {
+        $this->assertSame(['tint' => 0.7], $this->model()->validate(['tint' => '0,7']));
+        $this->assertSame(['tint' => 0.85], $this->model()->validate(['tint' => ' 0,85 ']));
+        $this->assertSame([], $this->model()->validate(['tint' => '0,7,1']));
+    }
+
     public function testResolveLayersUserOverAdminOverDefaults(): void
     {
         $m = $this->model();

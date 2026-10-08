@@ -62,6 +62,9 @@ class OptionsModel extends Base
                     }
                     break;
                 case 'float':
+                    if (is_string($raw)) {
+                        $raw = str_replace(',', '.', $raw); // decimal-comma locales type 0,7
+                    }
                     if (is_numeric($raw)) {
                         $out[$key] = round(max($s['min'], min($s['max'], (float) $raw)), 2);
                     }
