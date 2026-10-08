@@ -1,23 +1,127 @@
 {
   "version": 1,
   "characters": {
-    "saffron": { "name": "Saffron", "set": "brawl" },
-    "sol-grande": { "name": "Sol Grande", "set": "brawl" },
-    "copperjab": { "name": "Copperjab", "set": "brawl" },
-    "glyph": { "name": "Glyph", "set": "brawl" },
-    "tundra": { "name": "Tundra", "set": "wild" },
-    "ironbraid": { "name": "Ironbraid", "set": "wild" },
-    "tabby-vance": { "name": "Tabby Vance", "set": "wild" },
-    "mikan": { "name": "Mikan", "set": "wild" },
-    "velvet": { "name": "Velvet", "set": "night" },
-    "ossian": { "name": "Ossian", "set": "night" },
-    "moonfang": { "name": "Moonfang", "set": "night" },
-    "lanternbone": { "name": "Lanternbone", "set": "night" }
+    "saffron": {
+      "name": "Saffron",
+      "set": "brawl",
+      "seed": 20261757,
+      "prompt_id": "f5c58410-272f-4fcd-91d8-ac82a9740651",
+      "victory_seed": 20261758,
+      "victory_prompt_id": "763d970d-8068-4533-8cf0-800f37b1d63c"
+    },
+    "sol-grande": {
+      "name": "Sol Grande",
+      "set": "brawl",
+      "seed": 20262010,
+      "prompt_id": "633e67d0-7acb-49ba-bf95-df3310b081ad",
+      "victory_seed": 20262011,
+      "victory_prompt_id": "e16f926d-0a0e-42af-8773-65df34fd06ae"
+    },
+    "copperjab": {
+      "name": "Copperjab",
+      "set": "brawl",
+      "seed": 20261956,
+      "prompt_id": "a6d86cc7-d944-4050-856b-059b3a777380",
+      "victory_seed": 20261957,
+      "victory_prompt_id": "fd38d8e6-28d1-40f7-b1e2-c0a944e0818b"
+    },
+    "glyph": {
+      "name": "Glyph",
+      "set": "brawl",
+      "seed": 20261554,
+      "prompt_id": "bd0b8240-7157-4fed-a209-e240486650fb",
+      "victory_seed": 20261555,
+      "victory_prompt_id": "ae1a51a9-0f2f-4af6-9f28-ae23d9d763f4"
+    },
+    "tundra": {
+      "name": "Tundra",
+      "set": "wild",
+      "seed": 20261660,
+      "prompt_id": "fb142bd7-31ca-426d-8e52-050b131227a1",
+      "victory_seed": 20261661,
+      "victory_prompt_id": "642080a1-c45b-4838-8286-8fb99e21c625"
+    },
+    "ironbraid": {
+      "name": "Ironbraid",
+      "set": "wild",
+      "seed": 20261960,
+      "prompt_id": "fad03793-18ca-45e2-b4cf-09033d4c9ae2",
+      "victory_seed": 20261961,
+      "victory_prompt_id": "df25b124-cb94-4e82-be94-a1ca8e4abe0c"
+    },
+    "tabby-vance": {
+      "name": "Tabby Vance",
+      "set": "wild",
+      "seed": 20262106,
+      "prompt_id": "3880547f-ab21-4ab3-b384-e079635e69a8",
+      "victory_seed": 20262108,
+      "victory_prompt_id": "7e76ecc4-970a-485e-b593-518367f6f149"
+    },
+    "mikan": {
+      "name": "Mikan",
+      "set": "wild",
+      "seed": 20261534,
+      "prompt_id": "5340e654-fc6f-49e8-8cc6-1475ef894bef",
+      "victory_seed": 20261535,
+      "victory_prompt_id": "28346912-4fc5-4b46-b642-c84e7bc72d5f"
+    },
+    "velvet": {
+      "name": "Velvet",
+      "set": "night",
+      "seed": 20261668,
+      "prompt_id": "74f6e6f3-2cbe-44c6-8287-1e0f58ebdad2",
+      "victory_seed": 20261669,
+      "victory_prompt_id": "18dfe84a-9cb1-4763-bc87-2469aead295c"
+    },
+    "ossian": {
+      "name": "Ossian",
+      "set": "night",
+      "seed": 20261659,
+      "prompt_id": "34abc53f-9100-466f-a5d8-9546fb85e031",
+      "victory_seed": 20261660,
+      "victory_prompt_id": "67b109c0-b495-42cd-b94f-6a323c16ad3b"
+    },
+    "moonfang": {
+      "name": "Moonfang",
+      "set": "night",
+      "seed": 20261859,
+      "prompt_id": "0b31e106-03ee-4f97-a7b3-ef77a6ee7551",
+      "victory_seed": 20261860,
+      "victory_prompt_id": "56cd0370-1eb1-4959-b75c-51ef4095e62f"
+    },
+    "lanternbone": {
+      "name": "Lanternbone",
+      "set": "night",
+      "seed": 20262182,
+      "prompt_id": "dfcb9ba7-de86-4c18-80ab-289ae075ceb7",
+      "victory_seed": 20262183,
+      "victory_prompt_id": "25a2fa46-1770-44dd-a750-1bbcdd9c9af9"
+    }
   },
   "sets": {
-    "mixed": ["tabby-vance", "saffron", "tundra", "velvet"],
-    "brawl": ["sol-grande", "saffron", "glyph", "copperjab"],
-    "wild": ["tabby-vance", "tundra", "mikan", "ironbraid"],
-    "night": ["moonfang", "velvet", "ossian", "lanternbone"]
+    "mixed": [
+      "tabby-vance",
+      "saffron",
+      "tundra",
+      "velvet"
+    ],
+    "brawl": [
+      "sol-grande",
+      "saffron",
+      "glyph",
+      "copperjab"
+    ],
+    "wild": [
+      "tabby-vance",
+      "tundra",
+      "mikan",
+      "ironbraid"
+    ],
+    "night": [
+      "moonfang",
+      "velvet",
+      "ossian",
+      "lanternbone"
+    ]
   }
 }
