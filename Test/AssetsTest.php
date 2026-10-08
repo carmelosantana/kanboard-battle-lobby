@@ -40,6 +40,28 @@ class AssetsTest extends Base
         $this->assertDoesNotMatchRegularExpression('/\.task-board[^{]*\{[^}]*backdrop-filter/s', $css, 'cards must never use backdrop-filter');
     }
 
+    public function testCssRemapsCoreTextColoursForDarkSurfaces(): void
+    {
+        // e2e on 1.2.47: core light.min.css paints h1, column-title links, card "#id" and card links #333/#000 on dark glass
+        $css = file_get_contents($this->root() . '/Assets/css/battle-lobby.css');
+        $this->assertMatchesRegularExpression('/:root\s*\{[^}]*--color-primary:\s*var\(--bl-text\)/', $css);
+        $this->assertMatchesRegularExpression('/\.task-board a\s*\{[^}]*color:\s*var\(--bl-text\)/', $css);
+        // remapping --color-primary to light text needs core's white menus/tooltips dark too
+        foreach (['--dropdown-background-color', '--tooltip-background-color', '--draggable-placeholder-background-color'] as $v) {
+            $this->assertMatchesRegularExpression('/:root\\s*\\{[^}]*' . $v . ':\\s*var\\(--bl-/', $css, $v);
+        }
+        $this->assertMatchesRegularExpression('/#suggest-menu\\s*\\{[^}]*background:\\s*var\\(--bl-surface\\)/', $css);
+        // core literal colours the tokens cannot reach (due dates #000/#b94a48, list counts #767676, details #555)
+        $this->assertMatchesRegularExpression('/\\.task-date\\s*\\{[^}]*color:\\s*var\\(--bl-text\\)/', $css);
+        $this->assertMatchesRegularExpression('/span\\.task-date-overdue\\s*\\{[^}]*color:\\s*var\\(--bl-danger\\)/', $css);
+        $this->assertMatchesRegularExpression('/\\.table-list-header \\.table-list-header-count[^{]*\\{[^}]*color:\\s*var\\(--bl-text-muted\\)/', $css);
+        // the task summary keeps the task's pastel colour, so it keeps dark text
+        $this->assertMatchesRegularExpression('/\\.task-summary-container\\s*\\{[^}]*--color-primary:\\s*#/', $css);
+        // settings/profile content (.sidebar-content) sat bare on the art; core .form-help is brown (#a52a2a)
+        $this->assertMatchesRegularExpression('/\.sidebar-content[^{]*\{[^}]*background:\s*var\(--bl-surface\)/', $css);
+        $this->assertMatchesRegularExpression('/\.form-help\s*\{[^}]*color:\s*var\(--bl-text-muted\)/', $css);
+    }
+
     public function testBackgroundsWithinBudget(): void
     {
         foreach (['map', 'storm', 'island', 'victory'] as $k) {

@@ -1,12 +1,15 @@
 """Capture stock Kanboard pages (HTML + full-page PNG) from the base instance as theming reference.
 
 Usage: python3 BattleLobby/testing/capture_reference.py  (base instance from docker-compose.base.yml on :8082)
-Writes to BattleLobby/docs/kanboard-reference/{html,screenshots,css}/. CSRF tokens are scrubbed.
+Writes to BattleLobby/docs/kanboard-reference/{html,screenshots,css}/.
+Override with KB_BASE (instance URL) and KB_OUT (output dir), e.g. the e2e instance:
+  KB_BASE=http://localhost:8083 KB_OUT=BattleLobby/docs/themed-screenshots python3 BattleLobby/testing/capture_reference.py
+CSRF tokens are scrubbed.
 """
 import http.cookiejar, http.server, os, re, socketserver, subprocess, threading, urllib.parse, urllib.request
 
-BASE = "http://localhost:8082"
-OUT = os.path.join(os.path.dirname(__file__), "..", "docs", "kanboard-reference")
+BASE = os.environ.get("KB_BASE", "http://localhost:8082")
+OUT = os.environ.get("KB_OUT", os.path.join(os.path.dirname(__file__), "..", "docs", "kanboard-reference"))
 USER, PASSWORD = os.environ.get("KB_USER", "admin"), os.environ.get("KB_PASSWORD", "admin")  # harness dev defaults
 PAGES = {
     "login": "/login",
@@ -43,7 +46,7 @@ def cookie_header():
 
 class Proxy(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
-        req = urllib.request.Request(BASE + self.path, headers={"Cookie": self.server.cookie, "User-Agent": "dz-capture"})
+        req = urllib.request.Request(BASE + self.path, headers={"Cookie": self.server.cookie, "User-Agent": "bl-capture"})
         try:
             with urllib.request.urlopen(req, timeout=30) as r:
                 body, status, ctype = r.read(), r.status, r.headers.get("Content-Type", "")
@@ -76,7 +79,7 @@ def main():
         shot = os.path.abspath(os.path.join(OUT, "screenshots", name + ".png"))
         url = (BASE if name == "login" else proxy) + path
         subprocess.run(["google-chrome", "--headless=new", "--disable-gpu", "--hide-scrollbars", "--no-first-run",
-                        "--window-size=1440,1000", f"--screenshot={shot}", url],
+                        "--window-size=1440,1000", "--virtual-time-budget=3000", f"--screenshot={shot}", url],
                        check=True, capture_output=True, timeout=60)
         print(f"{name:18} {len(html):>7} bytes  {path}")
     for href in sorted(set(re.findall(r'href="(/assets/css/[^"?]+)', fetch("/dashboard")))):

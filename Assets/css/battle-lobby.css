@@ -19,6 +19,20 @@
   --bl-skew: -6deg; --bl-radius: 4px;
   --bl-cta-clip: polygon(0% 16%, 100% 6%, 98% 100%, 2% 90%);
   --bl-ease: cubic-bezier(.2, .8, .2, 1); --bl-dur: 140ms;
+  /* core light.min.css tokens: light text (h1, th a, dropdown text) needs dark menus, tooltips and drop placeholders */
+  --color-primary: var(--bl-text); --color-dark: var(--bl-text); --color-medium: var(--bl-text-muted); --color-light: var(--bl-text-muted);
+  --link-color-primary: var(--bl-accent); --link-color-hover: var(--bl-text); --activity-title-color: var(--bl-text); --user-mention-color: var(--bl-text);
+  --views-active-color: var(--bl-text-on-cta); --input-focus-color: var(--bl-text); --form-help-color: var(--bl-text-muted); --task-list-icons-color: var(--bl-text-muted);
+  --body-background-color: var(--bl-bg); --panel-background-color: var(--bl-surface); --panel-border-color: var(--bl-line);
+  --table-header-background-color: var(--bl-surface-2); --table-nth-background-color: var(--bl-card); --table-border-color: var(--bl-line);
+  --table-list-header-background-color: var(--bl-surface-2); --table-list-nth-background-color: var(--bl-card); --table-list-border-color: var(--bl-line); --table-list-header-border-color: var(--bl-line);
+  --table-list-row-background-color: var(--bl-surface-2); --activity-event-background-color: var(--bl-surface); --activity-event-hover-color: var(--bl-surface-2); --activity-title-border-color: var(--bl-line);
+  --comment-nth-background-color: var(--bl-card); --comment-title-border-color: var(--bl-line); --comment-highlighted-background-color: var(--bl-surface-2); --comment-highlighted-hover-background-color: var(--bl-surface-2);
+  --input-background-color: var(--bl-surface-2); --input-border-color: var(--bl-line); --input-placeholder-color: var(--bl-text-muted);
+  --sidebar-border-color: var(--bl-line); --draggable-item-selected-background-color: var(--bl-card); --draggable-item-hover-background-color: var(--bl-surface-2);
+  --dropdown-background-color: var(--bl-surface); --dropdown-border-color: var(--bl-line); --dropdown-li-border-color: var(--bl-line);
+  --tooltip-background-color: var(--bl-surface); --tooltip-border-color: var(--bl-line);
+  --draggable-placeholder-background-color: var(--bl-glass); --draggable-placeholder-border-color: var(--bl-line);
 }
 html[data-bl-glass="0"] { --bl-glass: var(--bl-surface); }
 @supports not (backdrop-filter: blur(1px)) { :root { --bl-glass: var(--bl-surface); } }
@@ -36,6 +50,15 @@ html:not([data-bl-glass="0"]) header { -webkit-backdrop-filter: blur(var(--bl-bl
   background: var(--bl-surface); color: var(--bl-text); border-color: var(--bl-line);
 }
 .table-list-row, table.table-striped tr:nth-child(odd) td { background: var(--bl-card); }
+.sidebar-content { background: var(--bl-surface); color: var(--bl-text); padding: 4px 16px 12px; border-radius: var(--bl-radius); }
+.form-help { color: var(--bl-text-muted); }
+#suggest-menu { background: var(--bl-surface); border-color: var(--bl-line); }
+.task-date { color: var(--bl-text); }
+/* task summary keeps the task's pastel colour → dark text, as core intends */
+.task-summary-container { --color-primary: #1b1f2a; --color-dark: #1b1f2a; --color-medium: #3a4050; --color-light: #3a4050; color: #1b1f2a; }
+.task-summary-container a { color: #1a4fb0; }
+span.task-date-overdue { color: var(--bl-danger); }
+.table-list-header .table-list-header-count, .table-list-row .table-list-details strong, td a.dropdown-menu:hover strong { color: var(--bl-text-muted); }
 input[type=text], input[type=password], input[type=email], input[type=number], textarea, select {
   background: var(--bl-surface-2); color: var(--bl-text); border: 1px solid var(--bl-line); border-radius: var(--bl-radius);
 }
@@ -94,6 +117,7 @@ html:not([data-bl-glass="0"]) #board td.board-column-expanded {
 .bl-tier[data-tier="2"] { background: radial-gradient(circle at 50% 30%, var(--bl-tier-2-in), var(--bl-tier-2-out)); }
 .bl-tier[data-tier="3"] { background: radial-gradient(circle at 50% 30%, var(--bl-tier-3-in), var(--bl-tier-3-out)); }
 .bl-tier[data-tier="4"] { background: radial-gradient(circle at 50% 30%, var(--bl-tier-4-in), var(--bl-tier-4-out)); }
+.task-board a { color: var(--bl-text); }
 .task-board-title, .task-board-title a { font-family: var(--bl-font-display); font-weight: 900; font-style: italic; text-transform: uppercase; color: var(--bl-text); }
 
 .bl-storm { display: inline-flex; gap: 4px; align-items: center; font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 30px; }

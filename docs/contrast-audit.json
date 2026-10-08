@@ -1,0 +1,58 @@
+{
+ "map": {
+  "bright_px": [
+   255,
+   209,
+   162
+  ],
+  "composited": [
+   69,
+   62,
+   63
+  ],
+  "body_ratio": 9.56,
+  "heading_ratio": 4.8
+ },
+ "storm": {
+  "bright_px": [
+   238,
+   208,
+   198
+  ],
+  "composited": [
+   65,
+   61,
+   71
+  ],
+  "body_ratio": 9.71,
+  "heading_ratio": 4.88
+ },
+ "island": {
+  "bright_px": [
+   248,
+   215,
+   161
+  ],
+  "composited": [
+   67,
+   63,
+   63
+  ],
+  "body_ratio": 9.52,
+  "heading_ratio": 4.78
+ },
+ "victory": {
+  "bright_px": [
+   253,
+   215,
+   155
+  ],
+  "composited": [
+   68,
+   63,
+   61
+  ],
+  "body_ratio": 9.51,
+  "heading_ratio": 4.78
+ }
+}

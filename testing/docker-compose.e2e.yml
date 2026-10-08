@@ -1,0 +1,13 @@
+# Plain Kanboard + Battle Lobby only (no ShadcnTheme), port 8083.
+#   docker compose -f BattleLobby/testing/docker-compose.e2e.yml up -d
+name: kb-battlelobby-e2e
+services:
+  kanboard:
+    image: kanboard/kanboard:latest
+    container_name: kb-battlelobby-e2e
+    ports: ["8083:80"]
+    volumes:
+      - kb-battlelobby-e2e-data:/var/www/app/data
+      - ../:/var/www/app/plugins/BattleLobby:ro
+volumes:
+  kb-battlelobby-e2e-data:

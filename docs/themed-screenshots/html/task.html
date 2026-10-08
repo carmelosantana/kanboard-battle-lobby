@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="robots" content="noindex,nofollow">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="referrer" content="no-referrer">
+
+        
+        <style>.task-board.color-yellow, .task-summary-container.color-yellow, .color-picker-square.color-yellow, .task-board-category.color-yellow, .table-list-category.color-yellow, .task-tag.color-yellow {background-color: rgb(245, 247, 196);border-color: rgb(223, 227, 45)}td.color-yellow { background-color: rgb(245, 247, 196)}.table-list-row.color-yellow {border-left: 5px solid rgb(223, 227, 45)}.task-board.color-blue, .task-summary-container.color-blue, .color-picker-square.color-blue, .task-board-category.color-blue, .table-list-category.color-blue, .task-tag.color-blue {background-color: rgb(219, 235, 255);border-color: rgb(168, 207, 255)}td.color-blue { background-color: rgb(219, 235, 255)}.table-list-row.color-blue {border-left: 5px solid rgb(168, 207, 255)}.task-board.color-green, .task-summary-container.color-green, .color-picker-square.color-green, .task-board-category.color-green, .table-list-category.color-green, .task-tag.color-green {background-color: rgb(189, 244, 203);border-color: rgb(74, 227, 113)}td.color-green { background-color: rgb(189, 244, 203)}.table-list-row.color-green {border-left: 5px solid rgb(74, 227, 113)}.task-board.color-purple, .task-summary-container.color-purple, .color-picker-square.color-purple, .task-board-category.color-purple, .table-list-category.color-purple, .task-tag.color-purple {background-color: rgb(223, 176, 255);border-color: rgb(205, 133, 254)}td.color-purple { background-color: rgb(223, 176, 255)}.table-list-row.color-purple {border-left: 5px solid rgb(205, 133, 254)}.task-board.color-red, .task-summary-container.color-red, .color-picker-square.color-red, .task-board-category.color-red, .table-list-category.color-red, .task-tag.color-red {background-color: rgb(255, 187, 187);border-color: rgb(255, 151, 151)}td.color-red { background-color: rgb(255, 187, 187)}.table-list-row.color-red {border-left: 5px solid rgb(255, 151, 151)}.task-board.color-orange, .task-summary-container.color-orange, .color-picker-square.color-orange, .task-board-category.color-orange, .table-list-category.color-orange, .task-tag.color-orange {background-color: rgb(255, 215, 179);border-color: rgb(255, 172, 98)}td.color-orange { background-color: rgb(255, 215, 179)}.table-list-row.color-orange {border-left: 5px solid rgb(255, 172, 98)}.task-board.color-grey, .task-summary-container.color-grey, .color-picker-square.color-grey, .task-board-category.color-grey, .table-list-category.color-grey, .task-tag.color-grey {background-color: rgb(238, 238, 238);border-color: rgb(204, 204, 204)}td.color-grey { background-color: rgb(238, 238, 238)}.table-list-row.color-grey {border-left: 5px solid rgb(204, 204, 204)}.task-board.color-brown, .task-summary-container.color-brown, .color-picker-square.color-brown, .task-board-category.color-brown, .table-list-category.color-brown, .task-tag.color-brown {background-color: #d7ccc8;border-color: #4e342e}td.color-brown { background-color: #d7ccc8}.table-list-row.color-brown {border-left: 5px solid #4e342e}.task-board.color-deep_orange, .task-summary-container.color-deep_orange, .color-picker-square.color-deep_orange, .task-board-category.color-deep_orange, .table-list-category.color-deep_orange, .task-tag.color-deep_orange {background-color: #ffab91;border-color: #e64a19}td.color-deep_orange { background-color: #ffab91}.table-list-row.color-deep_orange {border-left: 5px solid #e64a19}.task-board.color-dark_grey, .task-summary-container.color-dark_grey, .color-picker-square.color-dark_grey, .task-board-category.color-dark_grey, .table-list-category.color-dark_grey, .task-tag.color-dark_grey {background-color: #cfd8dc;border-color: #455a64}td.color-dark_grey { background-color: #cfd8dc}.table-list-row.color-dark_grey {border-left: 5px solid #455a64}.task-board.color-pink, .task-summary-container.color-pink, .color-picker-square.color-pink, .task-board-category.color-pink, .table-list-category.color-pink, .task-tag.color-pink {background-color: #f48fb1;border-color: #d81b60}td.color-pink { background-color: #f48fb1}.table-list-row.color-pink {border-left: 5px solid #d81b60}.task-board.color-teal, .task-summary-container.color-teal, .color-picker-square.color-teal, .task-board-category.color-teal, .table-list-category.color-teal, .task-tag.color-teal {background-color: #80cbc4;border-color: #00695c}td.color-teal { background-color: #80cbc4}.table-list-row.color-teal {border-left: 5px solid #00695c}.task-board.color-cyan, .task-summary-container.color-cyan, .color-picker-square.color-cyan, .task-board-category.color-cyan, .table-list-category.color-cyan, .task-tag.color-cyan {background-color: #b2ebf2;border-color: #00bcd4}td.color-cyan { background-color: #b2ebf2}.table-list-row.color-cyan {border-left: 5px solid #00bcd4}.task-board.color-lime, .task-summary-container.color-lime, .color-picker-square.color-lime, .task-board-category.color-lime, .table-list-category.color-lime, .task-tag.color-lime {background-color: #e6ee9c;border-color: #afb42b}td.color-lime { background-color: #e6ee9c}.table-list-row.color-lime {border-left: 5px solid #afb42b}.task-board.color-light_green, .task-summary-container.color-light_green, .color-picker-square.color-light_green, .task-board-category.color-light_green, .table-list-category.color-light_green, .task-tag.color-light_green {background-color: #dcedc8;border-color: #689f38}td.color-light_green { background-color: #dcedc8}.table-list-row.color-light_green {border-left: 5px solid #689f38}.task-board.color-amber, .task-summary-container.color-amber, .color-picker-square.color-amber, .task-board-category.color-amber, .table-list-category.color-amber, .task-tag.color-amber {background-color: #ffe082;border-color: #ffa000}td.color-amber { background-color: #ffe082}.table-list-row.color-amber {border-left: 5px solid #ffa000}</style>        <link rel="stylesheet" href="/assets/css/vendor.min.css?1775345902" media="screen">                    <link rel="stylesheet" href="/assets/css/light.min.css?1775345902" media="screen">                <link rel="stylesheet" href="/assets/css/print.min.css?1775345902" media="print">        
+                    <script  defer type="text/javascript" src="/assets/js/vendor.min.js?1775345902"></script>            <script  defer type="text/javascript" src="/assets/js/app.min.js?1775345902"></script>        
+        <link rel="stylesheet" href="/plugins/BattleLobby/Assets/css/battle-lobby.css?1791422815" media="screen">        <script  defer type="text/javascript" src="/plugins/BattleLobby/Assets/js/battle-lobby.js?1791386320"></script>
+        <link rel="icon" href="/assets/img/adaptive-favicon.svg" type="image/svg+xml">
+        <link rel="icon" type="image/png" href="/assets/img/favicon.png">
+        <link rel="apple-touch-icon" href="/assets/img/touch-icon-iphone.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/assets/img/touch-icon-ipad.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/assets/img/touch-icon-iphone-retina.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="/assets/img/touch-icon-ipad-retina.png">
+
+        <title>
+                            [SEED] Project 1, #1 - [SEED] Task 1 (proj 1)                    </title>
+
+        <link rel="preload" href="/plugins/BattleLobby/Assets/fonts/barlowcondensed/BarlowCondensed-BlackItalic.woff2" as="font" type="font/woff2" crossorigin>
+    </head>
+    <body data-status-url="/?controller=UserAjaxController&amp;action=status"
+          data-login-url="/login"
+          data-keyboard-shortcut-url="/?controller=DocumentationController&amp;action=shortcuts"
+          data-timezone="UTC"
+          data-js-date-format="mm/dd/yy"
+          data-js-time-format="HH:mm"
+    >
+
+                    
+
+<header>
+    <div class="title-container">
+        <h1>
+    <span class="logo">
+        <a href="/dashboard" class="" title='Dashboard' >K<span>B</span></a>    </span>
+    <span class="title">
+                    [SEED] Project 1                        </span>
+    </h1>
+    </div>
+    <div class="board-selector-container">
+            </div>
+    <div class="menus-container">
+        <span class="notification">
+    <a href="/user/1/notifications/web" class="js-modal-medium" title='My notifications' ><i class="fa fa-bell fa-fw js-modal-medium" aria-hidden="true"></i></a></span>
+&nbsp;
+    <div class="dropdown header-creation-menu">
+        <a href="#" class="dropdown-menu dropdown-menu-link-icon"><i class="fa fa-plus fa-fw"></i><i class="fa fa-caret-down"></i></a>
+        <ul>
+                            <li>
+                    <a href="/project/create" class="js-modal-medium" title='' ><i class="fa fa-plus fa-fw js-modal-medium" aria-hidden="true"></i>New project</a>                </li>
+                                        <li>
+                    <a href="/project/create/personal" class="js-modal-medium" title='' ><i class="fa fa-lock fa-fw js-modal-medium" aria-hidden="true"></i>New personal project</a>                </li>
+                                </ul>
+    </div>
+&nbsp;<div class="dropdown">
+    <a href="#" class="dropdown-menu dropdown-menu-link-icon"><div class="avatar avatar-20 avatar-inline"><div class="avatar-letter" style="background-color: rgb(134, 45, 132)" title="admin" role="img" aria-label="admin">A</div></div><i class="fa fa-caret-down"></i></a>
+    <ul>
+        <li class="no-hover"><strong>admin</strong></li>
+        <li>
+            <a href="/dashboard/1" class="" title='' ><i class="fa fa-fw fa-tachometer" aria-hidden="true"></i>My dashboard</a>        </li>
+        <li>
+            <a href="/user/show/1" class="" title='' ><i class="fa fa-fw fa-home" aria-hidden="true"></i>My profile</a>        </li>
+        <li>
+            <a href="/projects" class="" title='' ><i class="fa fa-fw fa-folder" aria-hidden="true"></i>Projects management</a>        </li>
+                    <li>
+                <a href="/users" class="" title='' ><i class="fa fa-fw fa-user" aria-hidden="true"></i>Users management</a>            </li>
+            <li>
+                <a href="/groups" class="" title='' ><i class="fa fa-fw fa-group" aria-hidden="true"></i>Groups management</a>            </li>
+            <li>
+                <a href="/extensions" class="" title='' ><i class="fa fa-fw fa-cubes" aria-hidden="true"></i>Plugins</a>            </li>
+            <li>
+                <a href="/settings" class="" title='' ><i class="fa fa-fw fa-cog" aria-hidden="true"></i>Settings</a>            </li>
+        
+        
+        <li>
+            <i class="fa fa-fw fa-life-ring" aria-hidden="true"></i>
+            <a href="https://docs.kanboard.org/v1/user/" target="_blank">Documentation</a>        </li>
+                    <li>
+                <a href="/logout?csrf_token=SCRUBBED" class="" title='' ><i class="fa fa-fw fa-sign-out" aria-hidden="true"></i>Logout</a>            </li>
+            </ul>
+</div>
+    </div>
+</header>
+        <section class="page">
+                        <section id="main">
+    <div class="project-header">
+    
+    <div class="dropdown-component">
+        <div class="dropdown">
+    <a href="#" class="dropdown-menu action-menu" title="Configure this project" aria-label="Configure this project"><i class="fa fa-cog"></i><i class="fa fa-caret-down"></i></a>
+    <ul>
+        
+                    <li>
+                <a href="/project/1/task/create" class="js-modal-large" title='' ><i class="fa fa-plus fa-fw js-modal-large" aria-hidden="true"></i>Add a new task</a>            </li>
+        
+        <li>
+            <a href="/project/1/activity" class="js-modal-medium" title='' ><i class="fa fa-dashboard fa-fw js-modal-medium" aria-hidden="true"></i>Activity</a>        </li>
+
+                    <li>
+                <a href="/project/1/customer-filters/create" class="js-modal-medium" title='' ><i class="fa fa-filter fa-fw js-modal-medium" aria-hidden="true"></i>Add custom filters</a>            </li>
+        
+        
+        
+                    <li>
+                <a href="/analytics/tasks/1" class="js-modal-large" title='' ><i class="fa fa-line-chart fa-fw js-modal-large" aria-hidden="true"></i>Analytics</a>            </li>
+        
+                    <li>
+                <a href="/export/tasks/1" class="js-modal-medium" title='' ><i class="fa fa-upload fa-fw js-modal-medium" aria-hidden="true"></i>Exports</a>            </li>
+        
+                    <li>
+                <a href="/project/1/import" class="js-modal-medium" title='' ><i class="fa fa-download fa-fw js-modal-medium" aria-hidden="true"></i>Import tasks</a>            </li>
+        
+                    <li>
+                <a href="/project/1" class="" title='' ><i class="fa fa-fw fa-cog" aria-hidden="true"></i>Configure this project</a>            </li>
+        
+        <li>
+            <a href="/projects" class="" title='' ><i class="fa fa-fw fa-folder" aria-hidden="true"></i>Manage projects</a>        </li>
+    </ul>
+</div>
+    </div>
+    <div class="views-switcher-component">
+        <ul class="views">
+    
+    
+    <li >
+        <a href="/project/1/overview/status%3Aopen" class="view-overview" title='Keyboard shortcut: &quot;v o&quot;' ><i class="fa fa-fw fa-eye" aria-hidden="true"></i>Overview</a>    </li>
+
+    
+    <li >
+        <a href="/board/1/search/status%3Aopen" class="view-board" title='Keyboard shortcut: &quot;v b&quot;' ><i class="fa fa-fw fa-th" aria-hidden="true"></i>Board</a>    </li>
+
+    
+    <li >
+        <a href="/list/1/search/status%3Aopen" class="view-listing" title='Keyboard shortcut: &quot;v l&quot;' ><i class="fa fa-fw fa-list" aria-hidden="true"></i>List</a>    </li>
+
+    </ul>
+    </div>
+    <div class="filter-box-component">
+        <div class="filter-box">
+    <form method="get" action="/" class="search">
+        <input type="hidden" name="controller" id="form-controller" value="TaskListController"/>        <input type="hidden" name="action" id="form-action" value="show"/>        <input type="hidden" name="plugin" id="form-plugin" value=""/>        <input type="hidden" name="project_id" id="form-project_id" value="1"/>
+        <div class="input-addon">
+            <input type="text" name="search" id="form-search" value="status:open" class="input-addon-field" placeholder="Filter" aria-label="Filter">            <div class="input-addon-item">
+                <div class="dropdown">
+    <a href="#" class="dropdown-menu dropdown-menu-link-icon" title="Default filters" aria-label="Default filters"><i class="fa fa-filter fa-fw"></i><i class="fa fa-caret-down"></i></a>
+    <ul>
+        <li><a href="#" class="filter-helper filter-reset" data-filter="status:open" title="Keyboard shortcut: &quot;r&quot;">Reset filters</a></li>
+        <li><a href="#" class="filter-helper" data-filter="status:open assignee:me">My tasks</a></li>
+        <li><a href="#" class="filter-helper" data-filter="status:open assignee:me due:tomorrow">My tasks due tomorrow</a></li>
+        <li><a href="#" class="filter-helper" data-filter="status:open due:today">Tasks due today</a></li>
+        <li><a href="#" class="filter-helper" data-filter="status:open due:tomorrow">Tasks due tomorrow</a></li>
+        <li><a href="#" class="filter-helper" data-filter="status:open due:yesterday">Tasks due yesterday</a></li>
+        <li><a href="#" class="filter-helper" data-filter="status:closed">Closed tasks</a></li>
+        <li><a href="#" class="filter-helper" data-filter="status:open">Open tasks</a></li>
+        <li><a href="#" class="filter-helper" data-filter="status:open assignee:nobody">Not assigned</a></li>
+        <li><a href="#" class="filter-helper" data-filter="status:open assignee:anybody">Assigned</a></li>
+        <li><a href="#" class="filter-helper" data-filter="status:open category:none">No category</a></li>
+        <li>
+            <a href="https://docs.kanboard.org/v1/user/search" target="_blank">View advanced search syntax</a>        </li>
+    </ul>
+</div>
+            </div>
+
+            
+                        <div class="input-addon-item">
+                <div class="dropdown">
+                    <a href="#" class="dropdown-menu dropdown-menu-link-icon" title="User filters" aria-label="Custom filters"><i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i></a>
+                    <ul>
+                        <li><a href="#" class="filter-helper" data-unique-filter="assignee:nobody">Not assigned</a></li>
+                        <li><a href="#" class="filter-helper" data-unique-filter="assignee:anybody">Assigned</a></li>
+                                                    <li><a href="#" class="filter-helper" data-unique-filter='assignee:"admin"'>admin</a></li>
+                                            </ul>
+                </div>
+            </div>
+            
+                        <div class="input-addon-item">
+                <div class="dropdown">
+                    <a href="#" class="dropdown-menu dropdown-menu-link-icon" title="Category filters" aria-label="Category filters"><i class="fa fa-folder-open fa-fw"></i><i class="fa fa-caret-down"></i></a>
+                    <ul>
+                        <li><a href="#" class="filter-helper" data-unique-filter="category:none">No category</a></li>
+                                                    <li><a href="#" class="filter-helper" data-unique-filter='category:"Category A"'>Category A</a></li>
+                                            </ul>
+                </div>
+            </div>
+                    </div>
+
+    </form>
+</div>
+    </div>
+
+    </div>
+        <section
+        class="sidebar-container" id="task-view"
+        data-edit-url="/task/1/edit"
+        data-subtask-url="/task/1/subtask/create"
+        data-internal-link-url="/task/1/internal-link/create"
+        data-comment-url="/task/1/comment/create">
+
+        <div class="sidebar sidebar-icons">
+    <div class="sidebar-title">
+        <h2>Task #1</h2>
+    </div>
+    <ul>
+        <li class="active">
+            <a href="/task/1" class="" title='' ><i class="fa fa-fw fa-newspaper-o" aria-hidden="true"></i>Summary</a>        </li>
+        <li >
+            <a href="/task/1/activity" class="" title='' ><i class="fa fa-fw fa-dashboard" aria-hidden="true"></i>Activity stream</a>        </li>
+        <li >
+            <a href="/task/1/transitions" class="" title='' ><i class="fa fa-fw fa-arrows-h" aria-hidden="true"></i>Transitions</a>        </li>
+        <li >
+            <a href="/task/1/analytics" class="" title='' ><i class="fa fa-fw fa-bar-chart" aria-hidden="true"></i>Analytics</a>        </li>
+        
+            </ul>
+
+        <div class="sidebar-title">
+        <h2>Actions</h2>
+    </div>
+    <ul>
+        
+                <li>
+            <a href="/task/1/edit" class="js-modal-large" title='' ><i class="fa fa-edit fa-fw js-modal-large" aria-hidden="true"></i>Edit the task</a>        </li>
+        <li>
+            <a href="/task/1/recurrence/edit" class="js-modal-medium" title='' ><i class="fa fa-refresh fa-rotate-90 fa-fw js-modal-medium" aria-hidden="true"></i>Edit recurrence</a>        </li>
+                <li>
+            <a href="/task/1/subtask/create" class="js-modal-medium" title='' ><i class="fa fa-plus fa-fw js-modal-medium" aria-hidden="true"></i>Add a sub-task</a>        </li>
+        
+        <li>
+            <a href="/task/1/internal-link/create" class="js-modal-medium" title='' ><i class="fa fa-code-fork fa-fw js-modal-medium" aria-hidden="true"></i>Add internal link</a>        </li>
+        <li>
+            <a href="/task/1/external-link/find" class="js-modal-medium" title='' ><i class="fa fa-external-link fa-fw js-modal-medium" aria-hidden="true"></i>Add external link</a>        </li>
+        
+        <li>
+            <a href="/task/1/comment/create" class="js-modal-small" title='' ><i class="fa fa-comment-o fa-fw js-modal-small" aria-hidden="true"></i>Add a comment</a>        </li>
+        
+        <li>
+            <a href="/task/1/file/create" class="js-modal-medium" title='' ><i class="fa fa-file fa-fw js-modal-medium" aria-hidden="true"></i>Attach a document</a>        </li>
+        <li>
+            <a href="/task/1/file/screenshot" class="js-modal-medium" title='' ><i class="fa fa-camera fa-fw js-modal-medium" aria-hidden="true"></i>Add a screenshot</a>        </li>
+        
+        <li>
+            <a href="/task/1/duplicate" class="js-modal-small" title='' ><i class="fa fa-files-o fa-fw js-modal-small" aria-hidden="true"></i>Duplicate</a>        </li>
+        <li>
+            <a href="/task/1/copy-to-project/1" class="js-modal-small" title='' ><i class="fa fa-clipboard fa-fw js-modal-small" aria-hidden="true"></i>Duplicate to project</a>        </li>
+        
+        <li>
+            <a href="/task/1/move-to-project/1" class="js-modal-small" title='' ><i class="fa fa-clone fa-fw js-modal-small" aria-hidden="true"></i>Move to project</a>        </li>
+        <li>
+            <a href="/task/1/email/create" class="js-modal-small" title='' ><i class="fa fa-paper-plane fa-fw js-modal-small" aria-hidden="true"></i>Send by email</a>        </li>
+        
+                    <li>
+                <a href="/task/1/position/show" class="js-modal-small" title='' ><i class="fa fa-arrows fa-fw js-modal-small" aria-hidden="true"></i>Move position</a>            </li>
+                                            <li>
+                    <a href="/task/1/close" class="js-modal-confirm" title='' ><i class="fa fa-times fa-fw js-modal-confirm" aria-hidden="true"></i>Close this task</a>                </li>
+                                        <li>
+                <a href="/task/1/remove/redirect/board" class="js-modal-confirm" title='' ><i class="fa fa-trash-o fa-fw js-modal-confirm" aria-hidden="true"></i>Remove</a>            </li>
+        
+            </ul>
+    </div>
+
+        <div class="sidebar-content">
+            
+<section id="task-summary">
+    <h2>[SEED] Task 1 (proj 1)</h2>
+
+    
+    <div class="task-summary-container color-yellow">
+        <div class="task-summary-columns">
+            <div class="task-summary-column">
+                <ul class="no-bullet">
+                    <li>
+                        <strong>Status:</strong>
+                        <span>
+                                                    open                                                </span>
+                    </li>
+                    <li>
+                        <strong>Priority:</strong> <span>3</span>
+                    </li>
+                                                                                
+                                    </ul>
+            </div>
+            <div class="task-summary-column">
+                <ul class="no-bullet">
+                                                                <li>
+                            <strong>Swimlane:</strong>
+                            <span>Default swimlane</span>
+                        </li>
+                                        <li>
+                        <strong>Column:</strong>
+                        <span>Ready</span>
+                    </li>
+                    <li>
+                        <strong>Position:</strong>
+                        <span>1</span>
+                    </li>
+
+                                    </ul>
+            </div>
+            <div class="task-summary-column">
+                <ul class="no-bullet">
+                    <li>
+                        <strong>Assignee:</strong>
+                        <span>
+                                                    admin                                                </span>
+                                            </li>
+                                                            
+                                    </ul>
+            </div>
+            <div class="task-summary-column">
+                <ul class="no-bullet">
+                                            <li>
+                            <strong>Due date:</strong>
+                            <span>10/08/2026 12:00</span>
+                        </li>
+                                        <li>
+                        <strong>Started:</strong>
+                                                    <span><a href="/task/1/start/SCRUBBED" class="" title='' >Start now</a></span>
+                                            </li>
+                    <li>
+                        <strong>Created:</strong>
+                        <span>10/08/2026 01:17</span>
+                    </li>
+                    <li>
+                        <strong>Modified:</strong>
+                        <span>10/08/2026 01:27</span>
+                    </li>
+                                                            <li>
+                        <strong>Moved:</strong>
+                        <span>10/08/2026 01:27</span>
+                    </li>
+                    
+                                    </ul>
+            </div>
+        </div>
+            </div>
+
+    
+    </section>
+
+<details class="accordion-section" >
+    <summary class="accordion-title">Description</summary>
+    <div class="accordion-content">
+        <article class="markdown">
+                    </article>
+    </div>
+</details>
+
+<details class="accordion-section" open>
+    <summary class="accordion-title">Sub-Tasks</summary>
+    <div class="accordion-content">
+            <table
+        class="subtasks-table table-striped table-scrolling"
+        data-save-position-url="/?controller=SubtaskController&amp;action=movePosition&amp;task_id=1"
+    >
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th class="column-10">Assignee</th>
+                        <th class="column-30">Time tracking</th>
+        </tr>
+    </thead>
+    <tbody>
+                <tr data-subtask-id="1">
+            <td>
+              <div class="subtask-table-td">
+                                      <i class="fa fa-arrows-alt draggable-row-handle" title="Change subtask position" role="button" aria-label="Change subtask position"></i>&nbsp;
+                      <div class="dropdown">
+    <a href="#" class="dropdown-menu dropdown-menu-link-icon"><div class="subtask-submenu"><i class="fa fa-cog"></i><i class="fa fa-caret-down"></i></div></a>
+    <ul>
+        <li>
+            <a href="/?controller=SubtaskController&amp;action=edit&amp;task_id=1&amp;subtask_id=1" class="js-modal-medium" title='' ><i class="fa fa-edit fa-fw js-modal-medium" aria-hidden="true"></i>Edit</a>        </li>
+        <li>
+            <a href="/?controller=SubtaskController&amp;action=confirm&amp;task_id=1&amp;subtask_id=1" class="js-modal-confirm" title='' ><i class="fa fa-trash-o fa-fw js-modal-confirm" aria-hidden="true"></i>Remove</a>        </li>
+                <li>
+            <a href="/?controller=SubtaskConverterController&amp;action=show&amp;task_id=1&amp;subtask_id=1" class="js-modal-confirm" title='' ><i class="fa fa-clone fa-fw js-modal-confirm" aria-hidden="true"></i>Convert to task</a>        </li>
+            </ul>
+</div>
+                    <span class="subtask-title"><a href="/?controller=SubtaskStatusController&amp;action=change&amp;project_id=1&amp;task_id=1&amp;subtask_id=1&amp;user_id=0&amp;fragment=table&amp;csrf_token=SCRUBBED" class="js-subtask-toggle-status" title='Subtask not started' ><i class="fa fa-square-o fa-fw "></i>Subtask 1 of task 1 proj 1</a></span>                              </div>
+            </td>
+            <td>
+                            </td>
+                        <td>
+                <span class="subtask-time-tracking">
+    
+    
+    
+    </span>
+            </td>
+        </tr>
+                <tr data-subtask-id="2">
+            <td>
+              <div class="subtask-table-td">
+                                      <i class="fa fa-arrows-alt draggable-row-handle" title="Change subtask position" role="button" aria-label="Change subtask position"></i>&nbsp;
+                      <div class="dropdown">
+    <a href="#" class="dropdown-menu dropdown-menu-link-icon"><div class="subtask-submenu"><i class="fa fa-cog"></i><i class="fa fa-caret-down"></i></div></a>
+    <ul>
+        <li>
+            <a href="/?controller=SubtaskController&amp;action=edit&amp;task_id=1&amp;subtask_id=2" class="js-modal-medium" title='' ><i class="fa fa-edit fa-fw js-modal-medium" aria-hidden="true"></i>Edit</a>        </li>
+        <li>
+            <a href="/?controller=SubtaskController&amp;action=confirm&amp;task_id=1&amp;subtask_id=2" class="js-modal-confirm" title='' ><i class="fa fa-trash-o fa-fw js-modal-confirm" aria-hidden="true"></i>Remove</a>        </li>
+                <li>
+            <a href="/?controller=SubtaskConverterController&amp;action=show&amp;task_id=1&amp;subtask_id=2" class="js-modal-confirm" title='' ><i class="fa fa-clone fa-fw js-modal-confirm" aria-hidden="true"></i>Convert to task</a>        </li>
+            </ul>
+</div>
+                    <span class="subtask-title"><a href="/?controller=SubtaskStatusController&amp;action=change&amp;project_id=1&amp;task_id=1&amp;subtask_id=2&amp;user_id=0&amp;fragment=table&amp;csrf_token=SCRUBBED" class="js-subtask-toggle-status" title='Subtask not started' ><i class="fa fa-square-o fa-fw "></i>Subtask 2 of task 1 proj 1</a></span>                              </div>
+            </td>
+            <td>
+                            </td>
+                        <td>
+                <span class="subtask-time-tracking">
+    
+    
+    
+    </span>
+            </td>
+        </tr>
+            </tbody>
+    </table>
+    </div>
+</details>
+
+<details class="accordion-section" >
+    <summary class="accordion-title">Internal links</summary>
+    <div class="accordion-content">
+            </div>
+</details>
+
+<details class="accordion-section" >
+    <summary class="accordion-title">External links</summary>
+    <div class="accordion-content">
+            </div>
+</details>
+
+<details class="accordion-section" open>
+    <summary class="accordion-title">Attachments</summary>
+    <div class="accordion-content">
+                    <table class="table-striped table-scrolling">
+        <tr>
+            <th>Filename</th>
+            <th class="column-15">Size</th>
+            <th class="column-15">Creator</th>
+            <th class="column-10">Date</th>
+        </tr>
+                    <tr>
+                <td>
+                    <i class="fa fa-file-o fa-fw"></i>
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-menu dropdown-menu-link-text">shared-spec.txt <i class="fa fa-caret-down"></i></a>
+                        <ul>
+                                                            <li>
+                                    <a href="/task/1/file/2/show/4151604f53c76aeaeaa76a1062c7c7f4" class="js-modal-large" title='' ><i class="fa fa-eye fa-fw js-modal-large" aria-hidden="true"></i>View file</a>                                </li>
+                                                        <li>
+                                <a href="/task/1/file/2/download/4151604f53c76aeaeaa76a1062c7c7f4" class="" title='' ><i class="fa fa-fw fa-download" aria-hidden="true"></i>Download</a>                            </li>
+                                                            <li>
+                                    <a href="/task/1/file/2/confirm" class="js-modal-confirm" title='' ><i class="fa fa-trash-o fa-fw js-modal-confirm" aria-hidden="true"></i>Remove</a>                                </li>
+                                                                                </ul>
+                    </div>
+                </td>
+                <td>
+                    59                </td>
+                <td>
+                                    </td>
+                <td>
+                    10/08/2026                </td>
+            </tr>
+                    <tr>
+                <td>
+                    <i class="fa fa-file-o fa-fw"></i>
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-menu dropdown-menu-link-text">task-1-proj-1.txt <i class="fa fa-caret-down"></i></a>
+                        <ul>
+                                                            <li>
+                                    <a href="/task/1/file/1/show/9fb187fb1121430bc03f0cae31b88741" class="js-modal-large" title='' ><i class="fa fa-eye fa-fw js-modal-large" aria-hidden="true"></i>View file</a>                                </li>
+                                                        <li>
+                                <a href="/task/1/file/1/download/9fb187fb1121430bc03f0cae31b88741" class="" title='' ><i class="fa fa-fw fa-download" aria-hidden="true"></i>Download</a>                            </li>
+                                                            <li>
+                                    <a href="/task/1/file/1/confirm" class="js-modal-confirm" title='' ><i class="fa fa-trash-o fa-fw js-modal-confirm" aria-hidden="true"></i>Remove</a>                                </li>
+                                                                                </ul>
+                    </div>
+                </td>
+                <td>
+                    59                </td>
+                <td>
+                                    </td>
+                <td>
+                    10/08/2026                </td>
+            </tr>
+            </table>
+    </div>
+</details>
+
+<details class="accordion-section" open>
+    <summary class="accordion-title">Comments</summary>
+    <div class="accordion-content comments" id="comments">
+                    <div class="comment-sorting">
+                <small>
+                                            <a href="/task/1/comment/create" class="js-modal-medium" title='' ><i class="fa fa-comment fa-fw js-modal-medium" aria-hidden="true"></i>Add a comment</a>                                        <a href="/?controller=CommentController&amp;action=toggleSorting&amp;task_id=1&amp;csrf_token=SCRUBBED" class="" title='' ><i class="fa fa-fw fa-sort" aria-hidden="true"></i>Change sorting</a>                                            <a href="/?controller=CommentMailController&amp;action=create&amp;task_id=1" class="js-modal-medium" title='' ><i class="fa fa-paper-plane fa-fw js-modal-medium" aria-hidden="true"></i>Send by email</a>                                    </small>
+            </div>
+                            
+<div class="comment " id="comment-1">
+
+    <div class="avatar avatar-48 avatar-left"><div class="avatar-letter" style="background-color: rgb(134, 45, 132)" title="admin" role="img" aria-label="admin">A</div></div>
+    <div class="comment-title">
+                    <strong class="comment-username">admin</strong>
+        
+        <small class="comment-date">Created at: 10/08/2026 01:17</small>
+        <small class="comment-date">Updated at: 10/08/2026 01:17</small>
+        <small class="comment-visibility">Visibility:                            Standard users                    </small>
+    </div>
+
+        <div class="comment-actions">
+        <div class="dropdown">
+            <a href="#" class="dropdown-menu dropdown-menu-link-icon"><i class="fa fa-cog"></i><i class="fa fa-caret-down"></i></a>
+            <ul>
+                <li>
+                    <a href="/task/1#comment-1" class="" title='' ><i class="fa fa-fw fa-link" aria-hidden="true"></i>Link</a>                </li>
+                <li data-comment-id="1">
+                    <a href="/task/1#form-task_id" class="js-reply-to-comment" title='' ><i class="fa fa-fw fa-reply" aria-hidden="true"></i>Reply</a>                </li>
+                                    <li>
+                        <a href="/task/1/comment/1/edit" class="js-modal-medium" title='' ><i class="fa fa-edit fa-fw js-modal-medium" aria-hidden="true"></i>Edit</a>                    </li>
+                    <li>
+                        <a href="/task/1/comment/1/confirm" class="js-modal-confirm" title='' ><i class="fa fa-trash-o fa-fw js-modal-confirm" aria-hidden="true"></i>Remove</a>                    </li>
+                            </ul>
+        </div>
+    </div>
+    
+    <div class="comment-content">
+        <div class="markdown">
+            <p>Comment 1 on task 1 proj 1</p>        </div>
+        <template id="comment-reply-content-1">
+            <textarea>admin wrote: 
+> Comment 1 on task 1 proj 1</textarea>
+        </template>
+    </div>
+</div>                    
+<div class="comment " id="comment-2">
+
+    <div class="avatar avatar-48 avatar-left"><div class="avatar-letter" style="background-color: rgb(134, 45, 132)" title="admin" role="img" aria-label="admin">A</div></div>
+    <div class="comment-title">
+                    <strong class="comment-username">admin</strong>
+        
+        <small class="comment-date">Created at: 10/08/2026 01:17</small>
+        <small class="comment-date">Updated at: 10/08/2026 01:17</small>
+        <small class="comment-visibility">Visibility:                            Standard users                    </small>
+    </div>
+
+        <div class="comment-actions">
+        <div class="dropdown">
+            <a href="#" class="dropdown-menu dropdown-menu-link-icon"><i class="fa fa-cog"></i><i class="fa fa-caret-down"></i></a>
+            <ul>
+                <li>
+                    <a href="/task/1#comment-2" class="" title='' ><i class="fa fa-fw fa-link" aria-hidden="true"></i>Link</a>                </li>
+                <li data-comment-id="2">
+                    <a href="/task/1#form-task_id" class="js-reply-to-comment" title='' ><i class="fa fa-fw fa-reply" aria-hidden="true"></i>Reply</a>                </li>
+                                    <li>
+                        <a href="/task/1/comment/2/edit" class="js-modal-medium" title='' ><i class="fa fa-edit fa-fw js-modal-medium" aria-hidden="true"></i>Edit</a>                    </li>
+                    <li>
+                        <a href="/task/1/comment/2/confirm" class="js-modal-confirm" title='' ><i class="fa fa-trash-o fa-fw js-modal-confirm" aria-hidden="true"></i>Remove</a>                    </li>
+                            </ul>
+        </div>
+    </div>
+    
+    <div class="comment-content">
+        <div class="markdown">
+            <p>Comment 2 on task 1 proj 1</p>        </div>
+        <template id="comment-reply-content-2">
+            <textarea>admin wrote: 
+> Comment 2 on task 1 proj 1</textarea>
+        </template>
+    </div>
+</div>        
+                    <form method="post" action="/task/1/comment/save" autocomplete="off">
+    <input type="hidden" name="csrf_token" value="SCRUBBED"/>    <input type="hidden" name="task_id" id="form-task_id" value="1"/>    <input type="hidden" name="user_id" id="form-user_id" value="1"/>
+    <div class="js-text-editor" data-params='{"name":"comment","css":"","required":true,"tabindex":"-1","labelPreview":"Preview","previewUrl":"\/?controller=TaskAjaxController&action=preview","labelWrite":"Write","labelTitle":"Title","placeholder":"Write your text in Markdown","ariaLabel":"New comment","autofocus":false,"suggestOptions":{"triggers":{"#":"\/?controller=TaskAjaxController&action=suggest&search=SEARCH_TERM","@":"\/?controller=UserAjaxController&action=mention&project_id=1&search=SEARCH_TERM"}}}'><script type="text/template"></script></div>
+    
+    <label for="form-visibility" >Visibility:</label>
+    
+    <select name="visibility" id="form-visibility" class="" ><option value="app-user">Standard users</option><option value="app-manager">Application managers or more</option><option value="app-admin">Administrators</option></select>    <div class="js-submit-buttons" data-params='{"submitLabel":"Save","orLabel":"or","cancelLabel":"cancel","color":"blue","tabindex":null,"disabled":false}'></div></form>
+            </div>
+</details>
+
+        </div>
+    </section>
+</section>
+        </section>
+        <div id="bl-stage" class="bl-stage" aria-hidden="true" data-bl-context="page" data-bl-assets="/plugins/BattleLobby/Assets/" data-bl-readyup-url="/battlelobby/ready-up" data-bl-feed-url="/battlelobby/feed" data-bl-thanks-url="/battlelobby/thanks" data-bl-csrf="SCRUBBED" data-bl-background="map" data-bl-characters="mixed" data-bl-placement="auto" data-bl-motion="auto" data-bl-glass="1" data-bl-blur="12" data-bl-tint="0.78" data-bl-loading="1" data-bl-victory="1" data-bl-storm="1" data-bl-readyup="1" data-bl-feed="0" data-bl-thanks="0" data-bl-readyup-ready="0"></div>
+        </body>
+</html>
