@@ -1,6 +1,6 @@
 # Battle Lobby 1.0.0 release checklist
 
-Local verification on 2026-10-07. Nothing below has been pushed, tagged or published.
+Local verification on 2026-10-07. Published 2026-10-08.
 
 ## Verified locally
 
@@ -46,10 +46,11 @@ Local verification on 2026-10-07. Nothing below has been pushed, tagged or publi
 - [x] README disclaimer present; IpGuardTest green
 - [x] CHANGELOG dated `## 1.0.0 — 2026-10-07`
 
-## Before publishing
+## Published — 2026-10-08
 
-- [ ] `prototype` branch is local-only; never push it (contains research and references to the original game)
-- [ ] ModMenu feat/conflicts (f0348f7) needs Carmelo's merge + release before the directory lists `conflicts`
+- [x] `prototype` branch stays local-only; only `main` and tag `v1.0.0` are on the remote (`git ls-remote origin`)
+- [x] ModMenu 1.2.0 (conflicts) released, then 1.2.1 (badges set their own text colour; the Installed badge was unreadable under Battle Lobby)
+- [x] Public repo `carmelosantana/kanboard-battle-lobby`, `main` pushed, tag `v1.0.0` → release asset `BattleLobby-1.0.0.zip` (1,352,027 bytes, same as the local build)
+- [x] Directory entry in `kanboard-modmenu-directory` (screenshots pinned to the v1.0.0 tag, recommends TimeReport ≥1.5.0, conflicts ShadcnTheme); ModMenu bumped to 1.2.1
+- [x] Live install on a clean `kanboard/kanboard:v1.2.47`: ModMenu 1.2.1 from its release zip → Browse → Install Battle Lobby → "Plugin installed."; ShadcnTheme card shows the conflict; seeded board renders tiers, storm chips, lineup and READY UP with no console errors
 - [ ] Parent repo: merge branch claude/angry-curie-ba987d (runner registers BattleLobby, /BattleLobby/ gitignored)
-- [ ] Directory entry (kanboard-modmenu-directory) with description, recommends TimeReport ≥1.5.0, conflicts ShadcnTheme — needs Carmelo's go
-- [ ] Carmelo go for: create GitHub repo carmelosantana/kanboard-battle-lobby, push, tag v1.0.0, ModMenu directory entry
