@@ -4,6 +4,7 @@ require_once 'tests/units/Base.php';
 
 use KanboardTests\units\Base;
 use Kanboard\Plugin\BattleLobby\Controller\FeedController;
+use Kanboard\Plugin\BattleLobby\Model\FeedModel;
 use Kanboard\Core\Http\Request;
 use Kanboard\Core\Http\Response;
 use Kanboard\Core\Security\Role;
@@ -14,6 +15,24 @@ use Kanboard\Model\UserModel;
 
 class FeedControllerTest extends Base
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->container['battleLobbyFeed'] = fn ($c) => new FeedModel($c);
+    }
+
+    /** Every public method on a controller is a routable action; helpers with arguments 500 via the Runner. */
+    public function testOnlyTheEndpointsArePublicActions(): void
+    {
+        $own = array_filter(
+            (new \ReflectionClass(FeedController::class))->getMethods(\ReflectionMethod::IS_PUBLIC),
+            fn ($m) => $m->class === FeedController::class && ! $m->isConstructor()
+        );
+        $names = array_map(fn ($m) => $m->getName(), $own);
+        sort($names);
+        $this->assertSame(['recent', 'thanks'], $names);
+    }
+
     protected function tearDown(): void
     {
         unset($_SESSION['user']);
@@ -67,33 +86,6 @@ class FeedControllerTest extends Base
         return $captured['body'];
     }
 
-    // ---- events() ----
-
-    public function testEventsAreLimitedPlainAndNewestFirst(): void
-    {
-        $uid = (new UserModel($this->container))->create(['username' => 'alex', 'name' => '<b>Alex</b> & co']);
-        $pid = $this->container['projectModel']->create(['name' => 'Feed']);
-        $_SESSION['user'] = ['id' => $uid, 'role' => Role::APP_ADMIN, 'username' => 'alex'];
-        $ids = $this->seedActivity($pid, $uid, 7);
-
-        $events = (new FeedController($this->container))->events($pid);
-
-        $this->assertCount(5, $events);
-        foreach ($events as $e) {
-            $this->assertSame(['id', 'title', 'date'], array_keys($e));
-            $this->assertIsInt($e['id']);
-            $this->assertIsInt($e['date']);
-            $this->assertStringNotContainsString('<', $e['title']);
-            $this->assertStringNotContainsString('&amp;', $e['title']);
-            $this->assertStringContainsString('Alex & co', $e['title']);
-        }
-        $this->assertSame(array_slice(array_reverse($ids), 0, 5), array_column($events, 'id'));
-        $dates = array_column($events, 'date');
-        $sorted = $dates;
-        rsort($sorted);
-        $this->assertSame($sorted, $dates);
-    }
-
     // ---- recent(): GET endpoint ----
 
     public function testRecentForAProjectViewer(): void
@@ -114,32 +106,6 @@ class FeedControllerTest extends Base
         $this->seedActivity($pid, $uid, 2);
         $this->loginAs($uid, null, null);
         $this->assertSame(['ok' => false, 'error' => 'forbidden'], $this->call('recent', ['project_id' => (string) $pid]));
-    }
-
-    // ---- addThanks() ----
-
-    public function testThanksOncePerUserPerTask(): void
-    {
-        $uid = (new UserModel($this->container))->create(['username' => 'gg']);
-        $other = (new UserModel($this->container))->create(['username' => 'gg2']);
-        $pid = $this->container['projectModel']->create(['name' => 'T']);
-        $tid = (new TaskCreationModel($this->container))->create(['project_id' => $pid, 'title' => 'ship it']);
-        $c = new FeedController($this->container);
-        $this->assertIsInt($c->addThanks($tid, $uid));
-        $this->assertSame('already_thanked', $c->addThanks($tid, $uid));
-        $this->assertIsInt($c->addThanks($tid, $other)); // per user, not per task
-        $this->assertCount(2, $this->container['commentModel']->getAll($tid));
-    }
-
-    public function testThanksCommentKeepsTheEmojiInSqlite(): void
-    {
-        $uid = (new UserModel($this->container))->create(['username' => 'gg']);
-        $pid = $this->container['projectModel']->create(['name' => 'T']);
-        $tid = (new TaskCreationModel($this->container))->create(['project_id' => $pid, 'title' => 'ship it']);
-        $cid = (new FeedController($this->container))->addThanks($tid, $uid);
-        $comment = $this->container['commentModel']->getById($cid);
-        $this->assertSame('🙏 GG — thanks for shipping this!', $comment['comment']);
-        $this->assertSame($uid, (int) $comment['user_id']);
     }
 
     // ---- thanks(): POST endpoint (CSRF + comment-create permission) ----

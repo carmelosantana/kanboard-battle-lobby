@@ -29,6 +29,6 @@ class PluginTest extends Base
     {
         $plugin = new Plugin($this->container);
         $plugin->initialize();
-        $this->assertTrue(true);
+        $this->assertInstanceOf(\Kanboard\Plugin\BattleLobby\Model\FeedModel::class, $this->container['battleLobbyFeed']);
     }
 }

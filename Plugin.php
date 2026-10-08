@@ -21,6 +21,9 @@ class Plugin extends Base
         $this->container['battleLobbyReadyUp'] = function ($c) {
             return new \Kanboard\Plugin\BattleLobby\Model\ReadyUpModel($c);
         };
+        $this->container['battleLobbyFeed'] = function ($c) {
+            return new \Kanboard\Plugin\BattleLobby\Model\FeedModel($c);
+        };
 
         $this->helper->register('battleLobby', \Kanboard\Plugin\BattleLobby\Helper\LobbyHelper::class);
 
