@@ -1,13 +1,14 @@
-# Plain Kanboard + Battle Lobby only (no ShadcnTheme), port 8083.
+# Plain Kanboard + Battle Lobby only (no ShadcnTheme), port 8083, pinned to the declared floor (>=1.2.47).
+# Fresh volume per Kanboard version: a DB written by a newer Kanboard may not downgrade.
 #   docker compose -f BattleLobby/testing/docker-compose.e2e.yml up -d
 name: kb-battlelobby-e2e
 services:
   kanboard:
-    image: kanboard/kanboard:latest
+    image: kanboard/kanboard:v1.2.47
     container_name: kb-battlelobby-e2e
     ports: ["8083:80"]
     volumes:
-      - kb-battlelobby-e2e-data:/var/www/app/data
+      - kb-battlelobby-e2e-1247:/var/www/app/data
       - ../:/var/www/app/plugins/BattleLobby:ro
 volumes:
-  kb-battlelobby-e2e-data:
+  kb-battlelobby-e2e-1247:
