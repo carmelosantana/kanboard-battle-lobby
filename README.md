@@ -14,7 +14,7 @@ victory screen.
 - Admin defaults (Settings → Battle Lobby) with per-user overrides (profile → Battle Lobby)
 - Respects reduced motion and reduced transparency; self-hosted fonts, no external requests
 
-Works better with **TimeReport** 1.5.0+ (quest-bar subtask progress, pass track, level badge).
+Works better with **TimeReport** 1.5.0+: it adds subtask progress and XP, and Battle Lobby will theme them in a later release.
 Not compatible with **ShadcnTheme**: enable one theme at a time.
 
 ## Install
@@ -23,8 +23,8 @@ Install from ModMenu, or unzip into `plugins/BattleLobby/`. Requires Kanboard �
 
 ## Local fan pack
 
-Drop your own files into `plugins/BattleLobby/local/` (never committed, never shipped):
-`local/fonts/display.woff2` replaces the heading font; `local/backgrounds/*.webp` add backgrounds.
+A local fan pack (your own heading font and backgrounds in `plugins/BattleLobby/local/`) is planned
+for a later release. `local/` is gitignored and never shipped. Battle Lobby 1.0.0 does not load it yet.
 Use only files you have the right to use.
 
 ## Licenses

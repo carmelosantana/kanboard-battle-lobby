@@ -8,7 +8,7 @@
     "kanboard_version": ">=1.2.47",
     "php_version": ">=8.4",
     "recommends": [
-        { "plugin": "TimeReport", "min_version": "1.5.0", "reason": "adds quest-bar subtask progress, a milestone pass track and a level badge (the theme works fully without it)" }
+        { "plugin": "TimeReport", "min_version": "1.5.0", "reason": "adds subtask progress and XP; Battle Lobby will theme them in a later release (the theme works fully without it)" }
     ],
     "conflicts": ["ShadcnTheme"]
 }
