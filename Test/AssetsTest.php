@@ -42,7 +42,7 @@ class AssetsTest extends Base
 
     public function testCssRemapsCoreTextColoursForDarkSurfaces(): void
     {
-        // e2e on 1.2.47: core light.min.css paints h1, column-title links, card "#id" and card links #333/#000 on dark glass
+        // e2e on v1.2.52 (kanboard/kanboard:latest): core light.min.css paints h1, column-title links, card "#id" and card links #333/#000 on dark glass
         $css = file_get_contents($this->root() . '/Assets/css/battle-lobby.css');
         $this->assertMatchesRegularExpression('/:root\s*\{[^}]*--color-primary:\s*var\(--bl-text\)/', $css);
         $this->assertMatchesRegularExpression('/\.task-board a\s*\{[^}]*color:\s*var\(--bl-text\)/', $css);
@@ -57,6 +57,8 @@ class AssetsTest extends Base
         $this->assertMatchesRegularExpression('/\\.table-list-header \\.table-list-header-count[^{]*\\{[^}]*color:\\s*var\\(--bl-text-muted\\)/', $css);
         // the task summary keeps the task's pastel colour, so it keeps dark text
         $this->assertMatchesRegularExpression('/\\.task-summary-container\\s*\\{[^}]*--color-primary:\\s*#/', $css);
+        // core .markdown pre is #fbfbfb with var(--color-medium) text → needs a dark surface once the token is light
+        $this->assertMatchesRegularExpression('/\\.markdown pre\\s*\\{[^}]*background:\\s*var\\(--bl-surface-2\\)/', $css);
         // settings/profile content (.sidebar-content) sat bare on the art; core .form-help is brown (#a52a2a)
         $this->assertMatchesRegularExpression('/\.sidebar-content[^{]*\{[^}]*background:\s*var\(--bl-surface\)/', $css);
         $this->assertMatchesRegularExpression('/\.form-help\s*\{[^}]*color:\s*var\(--bl-text-muted\)/', $css);

@@ -9,7 +9,7 @@ class BudgetTest extends Base
     public function testShippableTreeUnderEightMegabytes(): void
     {
         $root = dirname(__DIR__);
-        $skip = '#/(\.git|\.github|Test|testing|docs|tools|prototype|research_notes|local|reports)(/|$)#';
+        $skip = '#/(\.git|\.github|\.claude|Test|testing|docs|tools|prototype|research_notes|local|reports)(/|$)#';
         $total = 0;
         $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS));
         foreach ($it as $f) {

@@ -20,7 +20,7 @@ jobs:
           fi
           mkdir -p /tmp/stage/"$NAME"
           rsync -a --exclude '.git' --exclude '.github' --exclude 'Test' --exclude 'testing' --exclude 'docs' \
-            --exclude 'tools' --exclude 'prototype' --exclude 'research_notes' --exclude 'local' --exclude '.DS_Store' \
+            --exclude 'tools' --exclude 'prototype' --exclude 'research_notes' --exclude 'local' --exclude '.DS_Store' --exclude '.gitignore' \
             ./ /tmp/stage/"$NAME"/
           ( cd /tmp/stage && zip -qr "$GITHUB_WORKSPACE/${NAME}-${VERSION}.zip" "$NAME" )
           SIZE=$(stat -c%s "${NAME}-${VERSION}.zip"); [ "$SIZE" -le 8388608 ] || { echo "::error::zip ${SIZE}B > 8MB"; exit 1; }

@@ -26,7 +26,7 @@
   --body-background-color: var(--bl-bg); --panel-background-color: var(--bl-surface); --panel-border-color: var(--bl-line);
   --table-header-background-color: var(--bl-surface-2); --table-nth-background-color: var(--bl-card); --table-border-color: var(--bl-line);
   --table-list-header-background-color: var(--bl-surface-2); --table-list-nth-background-color: var(--bl-card); --table-list-border-color: var(--bl-line); --table-list-header-border-color: var(--bl-line);
-  --table-list-row-background-color: var(--bl-surface-2); --activity-event-background-color: var(--bl-surface); --activity-event-hover-color: var(--bl-surface-2); --activity-title-border-color: var(--bl-line);
+  --table-list-row-background-color: var(--bl-card); --activity-event-background-color: var(--bl-surface); --activity-event-hover-color: var(--bl-surface-2); --activity-title-border-color: var(--bl-line);
   --comment-nth-background-color: var(--bl-card); --comment-title-border-color: var(--bl-line); --comment-highlighted-background-color: var(--bl-surface-2); --comment-highlighted-hover-background-color: var(--bl-surface-2);
   --input-background-color: var(--bl-surface-2); --input-border-color: var(--bl-line); --input-placeholder-color: var(--bl-text-muted);
   --sidebar-border-color: var(--bl-line); --draggable-item-selected-background-color: var(--bl-card); --draggable-item-hover-background-color: var(--bl-surface-2);
@@ -54,6 +54,7 @@ html:not([data-bl-glass="0"]) header { -webkit-backdrop-filter: blur(var(--bl-bl
 .form-help { color: var(--bl-text-muted); }
 #suggest-menu { background: var(--bl-surface); border-color: var(--bl-line); }
 .task-date { color: var(--bl-text); }
+.markdown pre { background: var(--bl-surface-2); border-color: var(--bl-line); color: var(--bl-text); }
 /* task summary keeps the task's pastel colour → dark text, as core intends */
 .task-summary-container { --color-primary: #1b1f2a; --color-dark: #1b1f2a; --color-medium: #3a4050; --color-light: #3a4050; color: #1b1f2a; }
 .task-summary-container a { color: #1a4fb0; }
