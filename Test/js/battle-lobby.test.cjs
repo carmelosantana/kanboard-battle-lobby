@@ -52,6 +52,12 @@ test('victory: only cards newly arriving in a last column, across swimlanes', ()
   assert.deepEqual(bl.newArrivals(after, after), []);
 });
 
+test('blurValue drops the inline blur under reduced transparency', () => {
+  assert.equal(bl.blurValue(12, false), '12px');
+  assert.equal(bl.blurValue(12, true), '0px');
+  assert.equal(bl.blurValue(0, false), '0px');
+});
+
 test('motionAllowed honours explicit choice over OS preference', () => {
   assert.equal(bl.motionAllowed('auto', true), false);
   assert.equal(bl.motionAllowed('auto', false), true);

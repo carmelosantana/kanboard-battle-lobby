@@ -103,10 +103,15 @@
     return t.length > 120 ? t.slice(0, 120) : t;
   }
 
+  /* An inline --bl-blur on <html> beats the prefers-reduced-transparency media rule, so honour it here too. */
+  function blurValue(blur, reducedTransparency) {
+    return (reducedTransparency ? 0 : blur) + 'px';
+  }
+
   var api = { readPayload: readPayload, placementFor: placementFor, squadFor: squadFor, lineupOrder: lineupOrder,
     snapshotDone: snapshotDone, newArrivals: newArrivals, motionAllowed: motionAllowed, isBoardHref: isBoardHref,
     isCloseTaskAction: isCloseTaskAction, victoryPending: victoryPending, closeConfirmUrl: closeConfirmUrl, CONFIRM_BOX: CONFIRM_BOX,
-    readyUpBody: readyUpBody, toastText: toastText };
+    readyUpBody: readyUpBody, toastText: toastText, blurValue: blurValue };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = api; return; }
   root.BattleLobby = api;
@@ -130,7 +135,8 @@
     h.setAttribute('data-bl-motion', p.opts.motion === 'auto' ? 'auto' : p.opts.motion);
     h.setAttribute('data-bl-glass', p.opts.glass ? '1' : '0');
     h.setAttribute('data-bl-bg', p.opts.background);
-    h.style.setProperty('--bl-blur', p.opts.blur + 'px');
+    var lessGlass = !!(root.matchMedia && root.matchMedia('(prefers-reduced-transparency: reduce)').matches);
+    h.style.setProperty('--bl-blur', blurValue(p.opts.blur, lessGlass));
     h.style.setProperty('--bl-tint', String(p.opts.tint));
     if (p.opts.background !== 'none') h.style.setProperty('--bl-bg-image', 'url("' + p.assets + 'backgrounds/' + p.opts.background + '.webp")');
     if (!motionOk) h.setAttribute('data-bl-motion', 'off');
