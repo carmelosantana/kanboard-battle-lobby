@@ -108,10 +108,16 @@
     return (reducedTransparency ? 0 : blur) + 'px';
   }
 
+  var READYUP_LABELS = { nothing_ready: 'NOTHING READY', no_ready_column: 'NO READY COLUMN', ready_is_last: 'READY IS LAST', forbidden: 'NO ACCESS' };
+  /* Button text after a failed READY UP; network errors and non-JSON replies (expired session) land on TRY AGAIN too. */
+  function readyUpLabel(error) {
+    return READYUP_LABELS[error] || 'TRY AGAIN';
+  }
+
   var api = { readPayload: readPayload, placementFor: placementFor, squadFor: squadFor, lineupOrder: lineupOrder,
     snapshotDone: snapshotDone, newArrivals: newArrivals, motionAllowed: motionAllowed, isBoardHref: isBoardHref,
     isCloseTaskAction: isCloseTaskAction, victoryPending: victoryPending, closeConfirmUrl: closeConfirmUrl, CONFIRM_BOX: CONFIRM_BOX,
-    readyUpBody: readyUpBody, toastText: toastText, blurValue: blurValue };
+    readyUpBody: readyUpBody, readyUpLabel: readyUpLabel, toastText: toastText, blurValue: blurValue };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = api; return; }
   root.BattleLobby = api;
@@ -187,7 +193,6 @@
       var bit = el('i');
       bit.style.setProperty('--bl-cx', (Math.random() * 100).toFixed(1) + 'vw');
       bit.style.setProperty('--bl-cd', (Math.random() * 0.6).toFixed(2) + 's');
-      bit.style.setProperty('--bl-cr', Math.round(Math.random() * 720 - 360) + 'deg');
       confetti.appendChild(bit);
     }
     box.appendChild(h); ov.appendChild(confetti); ov.appendChild(box); doc.body.appendChild(ov);
@@ -271,6 +276,11 @@
     if (!pid) return;
     var btn = el('button', 'bl-cta', { type: 'button' });
     btn.textContent = 'READY UP';
+    function fail(error) {
+      btn.disabled = false;
+      btn.textContent = readyUpLabel(error);
+      root.setTimeout(function () { btn.textContent = 'READY UP'; }, 2500);
+    }
     btn.addEventListener('click', function () {
       btn.disabled = true;
       root.fetch(p.urls.readyup, { method: 'POST', credentials: 'same-origin',
@@ -279,11 +289,9 @@
         .then(function (r) { return r.json(); })
         .then(function (res) {
           if (res.ok) { root.location.reload(); return; }
-          btn.disabled = false;
-          btn.textContent = { nothing_ready: 'NOTHING READY', no_ready_column: 'NO READY COLUMN', ready_is_last: 'READY IS LAST', forbidden: 'NO ACCESS' }[res.error] || 'TRY AGAIN';
-          root.setTimeout(function () { btn.textContent = 'READY UP'; }, 2500);
+          fail(res.error);
         })
-        .catch(function () { btn.disabled = false; });
+        .catch(function () { fail(null); });
     });
     doc.body.appendChild(btn);
   }

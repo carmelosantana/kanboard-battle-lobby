@@ -136,3 +136,10 @@ test('toastText strips markup and clamps length', () => {
   assert.equal(bl.toastText({ title: 'x'.repeat(200) }).length, 120);
   assert.equal(bl.toastText({}), '');
 });
+
+test('readyUpLabel names each server error and falls back to TRY AGAIN (network, non-JSON, unknown)', () => {
+  assert.equal(bl.readyUpLabel('nothing_ready'), 'NOTHING READY');
+  assert.equal(bl.readyUpLabel('forbidden'), 'NO ACCESS');
+  assert.equal(bl.readyUpLabel('move_failed'), 'TRY AGAIN');
+  assert.equal(bl.readyUpLabel(undefined), 'TRY AGAIN');
+});

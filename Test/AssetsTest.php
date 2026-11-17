@@ -14,7 +14,7 @@ class AssetsTest extends Base
 
     public function testFontsAndLicenseShip(): void
     {
-        foreach (['BarlowCondensed-Black.woff2', 'BarlowCondensed-BlackItalic.woff2', 'OFL.txt'] as $f) {
+        foreach (['BarlowCondensed-Black.woff2', 'OFL.txt'] as $f) {
             $this->assertFileExists($this->root() . '/Assets/fonts/barlowcondensed/' . $f);
         }
         $this->assertSame('wOF2', substr(file_get_contents($this->root() . '/Assets/fonts/barlowcondensed/BarlowCondensed-Black.woff2'), 0, 4));

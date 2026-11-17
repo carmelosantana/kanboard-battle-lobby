@@ -24,7 +24,7 @@ Install from ModMenu, or unzip into `plugins/BattleLobby/`. Requires Kanboard â‰
 ## Local fan pack
 
 A local fan pack (your own heading font and backgrounds in `plugins/BattleLobby/local/`) is planned
-for a later release. `local/` is gitignored and never shipped. Battle Lobby 1.0.0 does not load it yet.
+for a later release. `local/` is gitignored and never shipped. Battle Lobby does not load it yet.
 Use only files you have the right to use.
 
 ## Licenses
