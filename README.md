@@ -14,7 +14,6 @@ victory screen.
 - Admin defaults (Settings → Battle Lobby) with per-user overrides (profile → Battle Lobby)
 - Respects reduced motion and reduced transparency; self-hosted fonts, no external requests
 
-Works better with **TimeReport** 1.5.0+: it adds subtask progress and XP, and Battle Lobby will theme them in a later release.
 Not compatible with **ShadcnTheme**: enable one theme at a time.
 
 ## Install
