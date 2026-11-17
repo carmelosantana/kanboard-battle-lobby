@@ -15,7 +15,7 @@ class PluginMetaTest extends Base
     {
         $j = $this->json();
         $this->assertSame('BattleLobby', $j['name']);
-        $this->assertSame('1.1.0', $j['version']);
+        $this->assertSame('1.1.1', $j['version']);
         $this->assertSame('>=1.2.47', $j['kanboard_version']);
         $this->assertSame('>=8.4', $j['php_version']);
         $this->assertSame('MIT', $j['license']);
@@ -30,12 +30,12 @@ class PluginMetaTest extends Base
         $this->assertStringContainsString('## ' . $version . ' — ', file_get_contents(dirname(__DIR__) . '/CHANGELOG.md'));
     }
 
-    public function testRecommendsTimeReportAndConflictsShadcn(): void
+    // No code reads TimeReport, so recommending it promised an integration that does not exist.
+    public function testNoDependenciesAndConflictsShadcn(): void
     {
         $j = $this->json();
         $this->assertArrayNotHasKey('requires', $j);
-        $this->assertSame(['TimeReport'], array_column($j['recommends'], 'plugin'));
-        $this->assertSame('1.5.0', $j['recommends'][0]['min_version']);
+        $this->assertArrayNotHasKey('recommends', $j);
         $this->assertSame(['ShadcnTheme'], $j['conflicts']);
     }
 }

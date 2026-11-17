@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1 — unreleased
+
+- No longer recommends TimeReport: nothing in Battle Lobby uses it yet, so ModMenu was prompting for a plugin that changes nothing.
+
 ## 1.1.0 — 2026-11-17
 
 - Everything sits square: no skewed tabs, cards or loading bar, no slanted buttons, no spinning confetti, no italic display type.
