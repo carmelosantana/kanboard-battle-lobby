@@ -34,10 +34,15 @@
 }
 html[data-bl-glass="0"] { --bl-glass: var(--bl-surface); }
 @supports not (backdrop-filter: blur(1px)) { :root { --bl-glass: var(--bl-surface); } }
-@media (prefers-reduced-transparency: reduce) { :root { --bl-glass: var(--bl-surface); --bl-blur: 0px; } }
+@media (prefers-reduced-transparency: reduce) {
+  html[data-bl-bg] { --bl-glass: var(--bl-surface); --bl-blur: 0px !important; }
+}
 
 /* ===== Reskin (all pages) ===== */
-body { background: var(--bl-bg); color: var(--bl-text); font-family: var(--bl-font-body); }
+html[data-bl-bg] body {
+  background: var(--bl-bg) var(--bl-bg-image, none) center / cover fixed no-repeat;
+  color: var(--bl-text); font-family: var(--bl-font-body);
+}
 a { color: var(--bl-accent); }
 h1, h2, h3, .page-header h2, .title-container, .board-column-title {
   font-family: var(--bl-font-display); font-weight: 900; text-transform: uppercase; letter-spacing: .01em;
@@ -83,7 +88,6 @@ html[data-bl-motion="off"] *, html[data-bl-motion="off"] *::before, html[data-bl
 .bl-options select, .bl-options input[type=number], .bl-options input[type=text] { min-width: 220px; }
 
 /* ===== Board ===== */
-html[data-bl-bg] body { background: var(--bl-bg) var(--bl-bg-image, none) center / cover fixed no-repeat; }
 .views { display: flex; gap: 4px; background: transparent; border: 0; }
 .views li { background: rgba(0,0,0,.35); border: 0; border-radius: var(--bl-radius); }
 .views li > * { display: inline-block; font-family: var(--bl-font-display); font-weight: 900; text-transform: uppercase; }

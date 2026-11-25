@@ -40,6 +40,31 @@ class AssetsTest extends Base
         $this->assertDoesNotMatchRegularExpression('/\.task-board[^{]*\{[^}]*backdrop-filter/s', $css, 'cards must never use backdrop-filter');
     }
 
+    public function testCssScopesBodySelectorsToMarkedPages(): void
+    {
+        $css = file_get_contents($this->root() . '/Assets/css/battle-lobby.css');
+        $css = preg_replace('~/\*.*?\*/~s', '', $css);
+        preg_match_all('/([^{}]+)\{/', $css, $rules);
+
+        foreach ($rules[1] as $selectors) {
+            foreach (explode(',', $selectors) as $selector) {
+                if (preg_match('/(?:^|[\s>+~])body(?![\w-])/i', $selector)) {
+                    $this->assertMatchesRegularExpression('/^html\[data-bl-bg\]\s+/', trim($selector), trim($selector));
+                }
+            }
+        }
+    }
+
+    public function testReducedTransparencyOverridesInlineBlur(): void
+    {
+        $css = file_get_contents($this->root() . '/Assets/css/battle-lobby.css');
+        preg_match('/@media\s*\(prefers-reduced-transparency:\s*reduce\)\s*\{((?:[^{}]|\{[^{}]*\})*)\}/', $css, $media);
+        $this->assertMatchesRegularExpression(
+            '/(?:^|\})\s*html\[data-bl-bg\]\s*\{[^}]*--bl-blur:\s*0px\s*!important\s*(?:;|\})/',
+            $media[1] ?? ''
+        );
+    }
+
     public function testCssRemapsCoreTextColoursForDarkSurfaces(): void
     {
         // e2e on v1.2.52 (kanboard/kanboard:latest): core light.min.css paints h1, column-title links, card "#id" and card links #333/#000 on dark glass
@@ -89,6 +114,23 @@ class AssetsTest extends Base
             $this->assertStringNotContainsString('<script', $src);
             $this->assertDoesNotMatchRegularExpression('/\son[a-z]+\s*=\s*["\']/i', $src);
         }
+    }
+
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function testHeadPreloadsFontOnlyWhenBattleLobbyIsActive(): void
+    {
+        (new Plugin($this->container))->initialize();
+        $hook = $this->container['template']->hook;
+        $head = $hook->render('template:layout:head');
+        $this->assertStringContainsString('rel="preload"', $head);
+        $this->assertStringContainsString('plugins/BattleLobby/Assets/fonts/barlowcondensed/BarlowCondensed-Black.woff2', $head);
+        $this->assertStringContainsString('as="font"', $head);
+
+        class_alias(self::class, 'Kanboard\\Plugin\\Harbor\\Plugin');
+        $this->assertSame('', $hook->render('template:layout:head'));
     }
 
     public function testConflictBannerRendersOnlyForAdminsWhenConflictActive(): void
