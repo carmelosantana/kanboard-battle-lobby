@@ -15,7 +15,7 @@ class PluginMetaTest extends Base
     {
         $j = $this->json();
         $this->assertSame('BattleLobby', $j['name']);
-        $this->assertSame('1.1.1', $j['version']);
+        $this->assertSame('1.2.0', $j['version']);
         $this->assertSame('>=1.2.47', $j['kanboard_version']);
         $this->assertSame('>=8.4', $j['php_version']);
         $this->assertSame('MIT', $j['license']);

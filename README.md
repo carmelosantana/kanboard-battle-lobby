@@ -14,7 +14,7 @@ victory screen.
 - Admin defaults (Settings → Battle Lobby) with per-user overrides (profile → Battle Lobby)
 - Respects reduced motion and reduced transparency; self-hosted fonts, no external requests
 
-Not compatible with **ShadcnTheme**: enable one theme at a time.
+Battle Lobby, **Harbor**, and **ShadcnTheme** are alternative themes. Enable only one at a time.
 
 ## Install
 
