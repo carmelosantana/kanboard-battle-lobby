@@ -3,13 +3,13 @@
 namespace Kanboard\Plugin\BattleLobby;
 
 use Kanboard\Core\Plugin\Base;
+use Kanboard\Plugin\BattleLobby\Core\LayoutChain;
 
 /**
  * Battle Lobby — a battle-royale lobby theme for Kanboard.
  *
- * Hooks + external assets only (no template overrides). Options resolve
- * user → admin → built-in via OptionsModel; per-task presentation lives in
- * LobbyHelper; JS reads the data-bl-* payload (CSP-safe).
+ * The chained layout paints the first frame from resolved options.
+ * LobbyHelper handles per-task presentation and the payload external JS reads.
  */
 class Plugin extends Base
 {
@@ -26,6 +26,7 @@ class Plugin extends Base
         };
 
         $this->helper->register('battleLobby', \Kanboard\Plugin\BattleLobby\Helper\LobbyHelper::class);
+        LayoutChain::register($this->template, 'BattleLobby:layout');
 
         $this->hook->on('template:layout:css', ['template' => 'plugins/BattleLobby/Assets/css/battle-lobby.css']);
         $this->hook->on('template:layout:js', ['template' => 'plugins/BattleLobby/Assets/js/battle-lobby.js']);

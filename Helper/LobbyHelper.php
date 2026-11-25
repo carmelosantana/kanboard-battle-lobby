@@ -59,6 +59,25 @@ class LobbyHelper extends Base
         return ['state' => 'far', 'label' => intdiv($delta, 86400) . 'd'];
     }
 
+    /** @return array<string, string> */
+    public function rootAttributes(?int $userId): array
+    {
+        $options = $this->options($userId);
+        $background = $options['background'];
+        $image = 'none';
+        if ($background !== 'none') {
+            $path = $this->helper->url->dir() . 'plugins/BattleLobby/Assets/backgrounds/' . $background . '.webp';
+            $image = 'url("' . strtr($path, ['"' => '%22', '\\' => '%5C', "\n" => '%0A', "\r" => '%0D', "\f" => '%0C']) . '")';
+        }
+
+        return [
+            'data-bl-motion' => $options['motion'],
+            'data-bl-glass' => $options['glass'] ? '1' : '0',
+            'data-bl-bg' => $background,
+            'style' => '--bl-tint:' . $options['tint'] . ';--bl-blur:' . $options['blur'] . 'px;--bl-bg-image:' . $image,
+        ];
+    }
+
     public function payloadAttributes(?int $userId, string $context): string
     {
         $context = in_array($context, self::CONTEXTS, true) ? $context : 'page';

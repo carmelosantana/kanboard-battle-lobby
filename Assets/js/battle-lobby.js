@@ -136,16 +136,12 @@
     return el('img', '', { src: p.assets + 'characters/' + slug + '-' + pose + '.webp', alt: '', decoding: 'async', width: '300', height: '500' });
   }
 
-  function applyRoot(p, motionOk) {
+  function applyRoot(p, reducedMotion) {
     var h = doc.documentElement;
-    h.setAttribute('data-bl-motion', p.opts.motion === 'auto' ? 'auto' : p.opts.motion);
-    h.setAttribute('data-bl-glass', p.opts.glass ? '1' : '0');
-    h.setAttribute('data-bl-bg', p.opts.background);
+    if (!h.hasAttribute('data-bl-bg')) return;
+    if (reducedMotion && p.opts.motion === 'auto') h.setAttribute('data-bl-motion', 'off');
     var lessGlass = !!(root.matchMedia && root.matchMedia('(prefers-reduced-transparency: reduce)').matches);
-    h.style.setProperty('--bl-blur', blurValue(p.opts.blur, lessGlass));
-    h.style.setProperty('--bl-tint', String(p.opts.tint));
-    if (p.opts.background !== 'none') h.style.setProperty('--bl-bg-image', 'url("' + p.assets + 'backgrounds/' + p.opts.background + '.webp")');
-    if (!motionOk) h.setAttribute('data-bl-motion', 'off');
+    if (lessGlass) h.style.setProperty('--bl-blur', blurValue(p.opts.blur, lessGlass));
   }
 
   function renderStage(stage, p, manifest) {
@@ -373,7 +369,7 @@
     if (p.context === 'page' && doc.getElementById('board-container')) p.context = 'board';
     var reduced = root.matchMedia && root.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var motionOk = motionAllowed(p.opts.motion, reduced);
-    applyRoot(p, motionOk);
+    applyRoot(p, reduced);
     var pendingVictory = consumePendingVictory();
     root.fetch(p.assets + 'characters/manifest.json', { credentials: 'same-origin' })
       .then(function (r) { return r.ok ? r.json() : { characters: {}, sets: {} }; })
