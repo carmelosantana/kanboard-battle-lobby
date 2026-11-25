@@ -1,12 +1,12 @@
 # Changelog
 
-## 1.2.0 — unreleased
+## 1.2.0 — 2026-11-25
 
 - Declares a conflict with Harbor so ModMenu can enforce using one theme at a time.
 - Renders Battle Lobby's appearance settings on the server for the first paint.
 - Scopes Battle Lobby's page colours to pages it marks and preloads fonts only while the theme is active.
 
-## 1.1.1 — unreleased
+## 1.1.1 — 2026-11-17
 
 - No longer recommends TimeReport: nothing in Battle Lobby uses it yet, so ModMenu was prompting for a plugin that changes nothing.
 
