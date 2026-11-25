@@ -31,11 +31,11 @@ class PluginMetaTest extends Base
     }
 
     // No code reads TimeReport, so recommending it promised an integration that does not exist.
-    public function testNoDependenciesAndConflictsShadcn(): void
+    public function testNoDependenciesAndConflictsWithOtherThemes(): void
     {
         $j = $this->json();
         $this->assertArrayNotHasKey('requires', $j);
         $this->assertArrayNotHasKey('recommends', $j);
-        $this->assertSame(['ShadcnTheme'], $j['conflicts']);
+        $this->assertSame(['ShadcnTheme', 'Harbor'], $j['conflicts']);
     }
 }

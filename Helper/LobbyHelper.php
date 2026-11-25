@@ -109,6 +109,7 @@ class LobbyHelper extends Base
 
     public function isConflictActive(): bool
     {
-        return class_exists('Kanboard\Plugin\ShadcnTheme\Plugin', false);
+        return class_exists('Kanboard\Plugin\ShadcnTheme\Plugin', false)
+            || class_exists('Kanboard\Plugin\Harbor\Plugin', false);
     }
 }

@@ -31,6 +31,18 @@ class LobbyHelperTest extends Base
         return new LobbyHelper($this->container);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function testHarborAloneActivatesConflict(): void
+    {
+        class_alias(BattleLobbyHarborPluginStub::class, 'Kanboard\\Plugin\\Harbor\\Plugin');
+
+        $this->assertFalse(class_exists('Kanboard\\Plugin\\ShadcnTheme\\Plugin', false));
+        $this->assertTrue($this->h()->isConflictActive());
+    }
+
     public function testTierDefaultRangeZeroToThree(): void
     {
         $p = ['priority_start' => 0, 'priority_end' => 3];
@@ -147,4 +159,8 @@ class LobbyHelperTest extends Base
     {
         $this->assertStringNotContainsString('data-bl-readyup-ready="1"', $this->h()->payloadAttributes(null, 'page'));
     }
+}
+
+final class BattleLobbyHarborPluginStub
+{
 }

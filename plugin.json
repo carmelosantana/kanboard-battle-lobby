@@ -7,5 +7,5 @@
     "homepage": "https://github.com/carmelosantana/kanboard-battle-lobby",
     "kanboard_version": ">=1.2.47",
     "php_version": ">=8.4",
-    "conflicts": ["ShadcnTheme"]
+    "conflicts": ["ShadcnTheme", "Harbor"]
 }
